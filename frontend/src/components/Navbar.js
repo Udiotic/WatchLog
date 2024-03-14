@@ -1,34 +1,32 @@
 import './Navbar.css'
-import React, { useState } from 'react';
-import { FaSearch } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 import { FaMoon } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
-import { MdOutlineWbSunny } from "react-icons/md";
 
 
+// sexy boy udit surve
 function Navbar(){
   return(
     <nav>
   <div className="nav-bar">
     <span className="logo navLogo">
-      <a href="#home">WatchLog</a>
+    <Link to="/home">Watchlog</Link>
     </span>
     <div className="menu">
       <ul className="nav-links">
         <li>
-          <a href="#Movies">Movies</a>
+          <Link to="/movies">Movies</Link>
         </li>
         <li>
-          <a href="#Shows">Shows</a>
+        <Link to="/shows">Shows</Link>
         </li>
         <li>
-          <a href="#Books">Books</a>
+        <Link to="/books">Books</Link>
         </li>
         <li>
-          <a href="#Music">Music</a>
+        <Link to="/music">Music</Link>
         </li>
         <li>
-          <a href="#Games">Games</a>
+          <Link to="/games">Games</Link>
         </li>
       </ul>
     </div>
@@ -40,6 +38,7 @@ function Navbar(){
       </div>
     
   </div>
+  
 </nav>
 
   );
