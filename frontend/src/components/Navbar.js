@@ -17,7 +17,6 @@ function Navbar() {
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
-
     return (
         <nav>
             <div className="nav-bar">
@@ -57,7 +56,8 @@ function Navbar() {
                         </div>
                     )}
                     {user ? (
-                      <div className="user-info"onMouseEnter={toggleDropdown} >
+
+                      <div className="user-info" onMouseEnter={toggleDropdown} >
                           <FaRegUserCircle size={30} />
                             <span className="username">{user.username}</span>
                         </div>
