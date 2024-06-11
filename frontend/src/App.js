@@ -1,16 +1,21 @@
 import './App.css';
-import Navbar from './components/Navbar.js';
-import Movies from './components/Movies.js';
-import { BrowserRouter } from 'react-router-dom';
+// import Navbar from './components/Navbar';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/login';
+import Signup from './pages/signup';
+import Landing from './pages/landing';
+import { AuthProvider } from './context/authprovider';
 function App() {
   return (
-    <BrowserRouter>
-    <div>
-      <Navbar/>
-      <Movies/>
-    </div>
-    </BrowserRouter>
-    
+    <AuthProvider>
+    <Routes>
+    <Route exact path="/" element={<Login/>} />
+    <Route exact path = "/signup" element = {<Signup/>} />
+    <Route exact path = "/login" element = {<Login/>} />
+    <Route exact path = "/landing" element = {<Landing/>}/>
+    </Routes>
+    </AuthProvider>
+
   );
 }
 

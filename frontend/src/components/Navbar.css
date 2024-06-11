@@ -9,7 +9,6 @@
     transition: all 0.4s ease;;
 }
 
-
 /* ===== Colours ===== */
 :root{
     --body-color: #2c3440;
@@ -25,18 +24,14 @@ body{
     background-color: var(--body-color);
 }
 
-
 nav{
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: relative;
+    margin: 0;
     height: 70px;
     width: 100%;
     background-color: var(--nav-color);
     z-index: 100;
 }
-
-
 
 nav .nav-bar{
     position: relative;
@@ -45,19 +40,16 @@ nav .nav-bar{
     width: 100%;
     background-color: var(--nav-color);
     margin: 0 auto;
-    padding: 0 30px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
-
-
 
 nav .nav-bar .logo a{
     font-size: 25px;
     font-weight: 500;
     color: var(--text-color);
     text-decoration: none;
+    padding-right: 30px;
 }
 
 .menu .logo-toggle{
@@ -65,6 +57,9 @@ nav .nav-bar .logo a{
 }
 
 .nav-bar .nav-links{
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 20px;
     display: flex;
     align-items: center;
 }
@@ -80,7 +75,7 @@ nav .nav-bar .logo a{
     font-weight: 400;
     color: var(--text-color);
     text-decoration: none;
-    padding: 10px;
+    padding: 15px;
 }
 
 .nav-links li a::before{
@@ -97,20 +92,33 @@ nav .nav-bar .logo a{
     transition: all 0.3s ease;
 }
 
+.userprofile:hover{
+    cursor: pointer;
+}
+
 .nav-links li:hover a::before{
     opacity: 1;
 }
 
-.searchBox {
+.nav-bar .userprofile{
+    margin-top: 5px;
+    margin-left: 10px;
+    padding-left: 20px;
+    float: right;
     position: relative;
-  }
-  
-  .search-field {
+}
+
+nav .searchBox {
+    padding-left: 10px;
+    position: relative;
+}
+
+.search-field {
     position: relative;
     margin: 10px; /* Add margin for spacing */
-  }
-  
-  .search-field input {
+}
+
+.search-field input {
     height: 100%;
     width: 100%;
     padding: 10px; /* Add padding for better visibility */
@@ -121,7 +129,34 @@ nav .nav-bar .logo a{
     font-weight: 400;
     color: var(--search-text);
     background-color: var(--search-bar);
-  }
-  
+}
 
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--nav-color);
+    border: 1px solid var(--text-color);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
 
+.dropdown-item {
+    padding: 10px 20px;
+    color: var(--text-color);
+    text-decoration: none;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item:hover {
+    background-color: #2c3440;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
