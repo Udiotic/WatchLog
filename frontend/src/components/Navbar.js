@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
-import { useAuth } from '../context/authprovider'; // Import useAuth hook
+import { useAuth } from '../context/authprovider';
+import SearchDialog from './SearchDialog'; // Import the new SearchDialog component
 
 function Navbar() {
-    const { user, logout } = useAuth(); // Get user and logout function from the context
+    const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
-        // Redirect to login page or home page after logout
         window.location.href = '/landing';
     };
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
+
+    const openDialog = () => {
+        setDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setDialogOpen(false);
+    };
+
     return (
         <nav>
             <div className="nav-bar">
@@ -26,46 +36,46 @@ function Navbar() {
                 <div className="menu">
                     <ul className="nav-links">
                         <li>
-                            <Link to="/movies">Movies</Link>
+                            <Link to="/films">FILMS</Link>
                         </li>
                         <li>
-                            <Link to="/shows">Shows</Link>
+                            <Link to="/shows">SHOWS</Link>
                         </li>
                         <li>
-                            <Link to="/books">Books</Link>
+                            <Link to="/books">BOOKS</Link>
                         </li>
                         <li>
-                            <Link to="/music">Music</Link>
+                            <Link to="/music">MUSIC</Link>
                         </li>
                         <li>
-                            <Link to="/games">Games</Link>
+                            <Link to="/games">GAMES</Link>
                         </li>
                     </ul>
                 </div>
-                <div className="searchBox">
-                    <div className="search-field">
-                        <input type="text" placeholder="Search..." />
-                    </div>
+                <div className="logButton">
+                    <button className="log-button" onClick={openDialog}>Search</button>
                 </div>
-                <div className="userprofile" onMouseLeave={toggleDropdown}>
+                <div className="userprofile">
                     {dropdownOpen && (
-                      <div className="dropdown-menu">
+                        <div className="dropdown-menu" onMouseLeave={toggleDropdown}>
                             <Link to="/profile" className="dropdown-item">Profile</Link>
                             <button className="dropdown-item" onClick={() => alert('Change Theme')}>Theme</button>
                             <button className="dropdown-item" onClick={handleLogout}>Logout</button>
                         </div>
                     )}
                     {user ? (
-
-                      <div className="user-info" onMouseEnter={toggleDropdown} >
-                          <FaRegUserCircle size={30} />
-                            <span className="username">{user.username}</span>
+                        <div className="user-info">
+                            <div className='logged-in' onMouseEnter={toggleDropdown}>
+                                <span className="username">{user.username}</span>
+                                <FaRegUserCircle size={30} />
+                            </div>
                         </div>
                     ) : (
                         <Link to="/login">Login</Link>
                     )}
                 </div>
             </div>
+            <SearchDialog open={dialogOpen} onClose={closeDialog} />
         </nav>
     );
 }

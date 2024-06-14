@@ -1,14 +1,16 @@
-*{
-  margin: 0;
-  padding: 0;
-  box-sizing: 72px;
-  font-family: sans-serif;
-  color: white;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.4s ease;
 }
 
-.Container
-{
-  width : 100vw;
-  height : 100vh;
-  background: #2c3440;
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }

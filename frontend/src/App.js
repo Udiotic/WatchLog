@@ -1,21 +1,32 @@
 import './App.css';
-// import Navbar from './components/Navbar';
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Landing from './pages/landing';
+import MovieDetails from './details/MovieDetails';
+import TVShowDetails from './details/TvshowDetails';
+import BookDetails from './details/BookDetails';
+import GameDetails from './details/GameDetails';
+import MusicDetails from './details/MusicDetails';
 import { AuthProvider } from './context/authprovider';
+import Profile from './pages/profile';
+
 function App() {
   return (
     <AuthProvider>
-    <Routes>
-    <Route exact path="/" element={<Login/>} />
-    <Route exact path = "/signup" element = {<Signup/>} />
-    <Route exact path = "/login" element = {<Login/>} />
-    <Route exact path = "/landing" element = {<Landing/>}/>
-    </Routes>
+      <Routes>
+        <Route exact path="/" element={<Landing />} />
+        <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/landing" element={<Landing />} />
+        <Route exact path="/movies/:id" element={<MovieDetails />} />
+        <Route exact path="/tvshows/:id" element={<TVShowDetails />} />
+        <Route exact path="/books/:id" element={<BookDetails />} />
+        <Route exact path="/games/:id" element={<GameDetails />} />
+        <Route exact path="/music/:id" element={<MusicDetails />} />
+        <Route exact path="/profile" element={<Profile />} />
+      </Routes>
     </AuthProvider>
-
   );
 }
 

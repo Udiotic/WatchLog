@@ -41,7 +41,9 @@ html, body {
     margin-bottom: 1rem;
     position: relative; /* Added position relative */
 }
-
+.username{
+    left: 0%;
+}
 .username input, .email input, .password input {
     width: 100%;
     padding: 1rem;

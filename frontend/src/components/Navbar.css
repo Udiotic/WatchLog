@@ -1,16 +1,15 @@
-/* ===== Google Font Import - Poppins ===== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    transition: all 0.4s ease;;
+    transition: all 0.4s ease;
 }
 
 /* ===== Colours ===== */
-:root{
+:root {
     --body-color: #2c3440;
     --nav-color: #14181c;
     --side-nav: #010718;
@@ -19,113 +18,109 @@
     --search-text: #010718;
 }
 
-body{
+body {
     height: 100vh;
     background-color: var(--body-color);
 }
 
-nav{
+nav {
     position: relative;
-    margin: 0;
-    height: 70px;
+    height: 4.375rem;
     width: 100%;
     background-color: var(--nav-color);
     z-index: 100;
 }
 
-nav .nav-bar{
+nav .nav-bar {
     position: relative;
     height: 100%;
-    max-width: 1000px;
+    max-width: 62.5rem;
     width: 100%;
-    background-color: var(--nav-color);
     margin: 0 auto;
     display: flex;
     align-items: center;
 }
 
-nav .nav-bar .logo a{
-    font-size: 25px;
+nav .nav-bar .logo a {
+    font-size: 1.5625rem;
     font-weight: 500;
     color: var(--text-color);
     text-decoration: none;
-    padding-right: 30px;
+    padding-right: 1.875rem;
 }
 
-.menu .logo-toggle{
+.menu .logo-toggle {
     display: none;
 }
 
-.nav-bar .nav-links{
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-left: 20px;
+.nav-bar .nav-links {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    margin-left: 1.25rem;
     display: flex;
     align-items: center;
 }
 
-.nav-bar .nav-links li{
-    margin: 0 5px;
+.nav-bar .nav-links li {
+    margin: 0 0.3125rem;
     list-style: none;
 }
 
-.nav-links li a{
+.nav-links li a {
     position: relative;
-    font-size: 17px;
+    font-size: 1rem;
     font-weight: 400;
     color: var(--text-color);
     text-decoration: none;
-    padding: 15px;
+    padding: 0.9375rem;
 }
 
-.nav-links li a::before{
+.nav-links li a::before {
     content: '';
     position: absolute;
     left: 50%;
     bottom: 0;
     transform: translateX(-50%);
-    height: 6px;
-    width: 6px;
+    height: 0.375rem;
+    width: 0.375rem;
     border-radius: 50%;
     background-color: var(--text-color);
     opacity: 0;
     transition: all 0.3s ease;
 }
 
-.userprofile:hover{
+.userprofile:hover {
     cursor: pointer;
 }
 
-.nav-links li:hover a::before{
+.nav-links li:hover a::before {
     opacity: 1;
 }
 
-.nav-bar .userprofile{
-    margin-top: 5px;
-    margin-left: 10px;
-    padding-left: 20px;
-    float: right;
+.nav-bar .userprofile {
+    margin-top: 0.25rem;
+    left: 0.25rem;
+    margin-left: 5%;
     position: relative;
 }
 
 nav .searchBox {
-    padding-left: 10px;
     position: relative;
 }
 
 .search-field {
     position: relative;
-    margin: 10px; /* Add margin for spacing */
+    margin: 0.625rem;
 }
 
 .search-field input {
     height: 100%;
     width: 100%;
-    padding: 10px; /* Add padding for better visibility */
+    padding: 0.625rem;
     outline: none;
     border: none;
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
     font-weight: 400;
     color: var(--search-text);
     background-color: var(--search-bar);
@@ -134,23 +129,20 @@ nav .searchBox {
 .dropdown-menu {
     position: absolute;
     top: 100%;
-    right: 0;
-    background-color: var(--nav-color);
-    border: 1px solid var(--text-color);
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #1c1c23;
+    border: 1px solid #b8b5b5;
     z-index: 1000;
     display: flex;
     flex-direction: column;
 }
 
 .dropdown-item {
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     color: var(--text-color);
     text-decoration: none;
     text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgba(255, 255, 255, 0.1);
+    border: none;
 }
 
 .dropdown-item:hover {
@@ -159,4 +151,30 @@ nav .searchBox {
 
 .dropdown-item:last-child {
     border-bottom: none;
+}
+
+.logged-in {
+    display: flex;
+}
+
+.username {
+    padding-top: 0.3125rem;
+}
+
+.logButton {
+    border-radius: 0.5rem;
+    border: none;
+    margin-left: 3%;
+}
+
+.log-button {
+    width: 7.5rem;
+    background-color: #303a42;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid;
+}
+
+.log-button:hover {
+    cursor: pointer;
 }
