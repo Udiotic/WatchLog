@@ -37,14 +37,12 @@ html, body {
     margin-bottom: 1rem;
 }
 
-.username, .email, .password {
+.username1, .email, .password {
     margin-bottom: 1rem;
     position: relative; /* Added position relative */
 }
-.username{
-    left: 0%;
-}
-.username input, .email input, .password input {
+
+.username1 input, .email input, .password input {
     width: 100%;
     padding: 1rem;
     border-radius: 0.5rem;
@@ -98,11 +96,34 @@ html, body {
 .forgot-password-text:hover {
     cursor: pointer;
 }
-.register-here{
+.register-here-1{
     text-align: center;
     margin-top: 1rem;
+    color: white;
 }
+
+.register-text:visited{
+    color: white;
+}
+
+.register-here-1 a {
+    color: white;
+}
+
+.register-here-1 a:visited {
+    color: white;
+}
+.register-text a{
+    text-decoration: underline;
+}
+
 .register-text:hover{
     cursor: pointer;
     text-decoration: underline;
+}
+
+.error-text {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
 }

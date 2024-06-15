@@ -97,8 +97,20 @@ html, body {
 .register-here{
     text-align: center;
     margin-top: 1rem;
+    color: white;
+}
+
+.register-text a{
+    color: white;
 }
 .register-text:hover{
     cursor: pointer;
     text-decoration: underline;
+    
+}
+
+.error-text {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
 }

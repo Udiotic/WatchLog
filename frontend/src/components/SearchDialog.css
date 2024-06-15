@@ -11,12 +11,13 @@
 }
 
 .dialog-content {
-    background: rgb(54, 59, 71);
+    background: rgb(56, 61, 73);
     padding: 2rem;
     border-radius: 0.5rem;
     width: 90%;
     max-width: 31.25rem;
     position: relative;
+    color: white;
 }
 
 .close-button {
@@ -31,7 +32,7 @@
 }
 
 .dialog-body {
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .sel-category {

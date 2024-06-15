@@ -49,6 +49,11 @@ nav .nav-bar .logo a {
     padding-right: 1.875rem;
 }
 
+.menu{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
 .menu .logo-toggle {
     display: none;
 }
@@ -56,8 +61,7 @@ nav .nav-bar .logo a {
 .nav-bar .nav-links {
     padding-left: 1.25rem;
     padding-right: 1.25rem;
-    margin-left: 1.25rem;
-    display: flex;
+    display: inline-flex;
     align-items: center;
 }
 
@@ -101,30 +105,8 @@ nav .nav-bar .logo a {
     margin-top: 0.25rem;
     left: 0.25rem;
     margin-left: 5%;
-    position: relative;
 }
 
-nav .searchBox {
-    position: relative;
-}
-
-.search-field {
-    position: relative;
-    margin: 0.625rem;
-}
-
-.search-field input {
-    height: 100%;
-    width: 100%;
-    padding: 0.625rem;
-    outline: none;
-    border: none;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--search-text);
-    background-color: var(--search-bar);
-}
 
 .dropdown-menu {
     position: absolute;
@@ -159,8 +141,12 @@ nav .searchBox {
 
 .username {
     padding-top: 0.3125rem;
+    color: white;
+    padding-left: 0.4rem;
 }
-
+.login-text a{
+    color: white;
+}
 .logButton {
     border-radius: 0.5rem;
     border: none;

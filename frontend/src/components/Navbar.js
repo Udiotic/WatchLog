@@ -66,12 +66,12 @@ function Navbar() {
                     {user ? (
                         <div className="user-info">
                             <div className='logged-in' onMouseEnter={toggleDropdown}>
+                                <FaRegUserCircle size={30} color="white"/>
                                 <span className="username">{user.username}</span>
-                                <FaRegUserCircle size={30} />
                             </div>
                         </div>
                     ) : (
-                        <Link to="/login">Login</Link>
+                        <span className='login-text'><Link to="/login">Login</Link></span>
                     )}
                 </div>
             </div>

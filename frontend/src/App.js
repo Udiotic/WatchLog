@@ -10,6 +10,7 @@ import GameDetails from './details/GameDetails';
 import MusicDetails from './details/MusicDetails';
 import { AuthProvider } from './context/authprovider';
 import Profile from './pages/profile';
+import VerifyEmail from './components/verifyEmail'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route exact path="/games/:id" element={<GameDetails />} />
         <Route exact path="/music/:id" element={<MusicDetails />} />
         <Route exact path="/profile" element={<Profile />} />
+        <Route exact path="/verify-email" element={<VerifyEmail />} /> 
       </Routes>
     </AuthProvider>
   );

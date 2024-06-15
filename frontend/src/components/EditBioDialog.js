@@ -33,8 +33,8 @@ const EditBioDialog = ({ isOpen, onClose, bio, setUser }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="dialog-overlay">
-            <div className="dialog-content">
+        <div className="dialog-overlay2">
+            <div className="dialog-content2">
                 <button className="close-button" onClick={onClose}>✖️</button>
                 <form onSubmit={handleSubmit}>
                     <textarea

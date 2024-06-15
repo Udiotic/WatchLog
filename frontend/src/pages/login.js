@@ -9,30 +9,39 @@ import './landing.js';
 import { Link } from 'react-router-dom';
 // import Navbar from '../components/Navbar'
 function Login() {
-    const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const handleLogin = async () => {
-        const response = await fetch('http://localhost:5000/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
+    const [emailOrUsername, setEmailOrUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const [error, setError] = useState(''); // Add state for error message
 
-        const data = await response.json();
-        if (response.ok) {
-            // Handle successful login (e.g., save token, redirect)
-            console.log('Login successful:', data);
-            login(data.token); // Use the login function from useAuth
-            navigate('/landing'); // Replace with your desired route
-        } else {
-            // Handle login errors
-            console.error('Login failed:', data.message);
+    const handleLogin = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ emailOrUsername, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                // Handle successful login (e.g., save token, redirect)
+                console.log('Login successful:', data);
+                login(data.token); // Use the login function from useAuth
+                navigate('/landing'); // Replace with your desired route
+            } else {
+                // Handle login errors
+                console.error('Login failed:', data.message);
+                setError(data.message); // Set the error message
+            }
+        } catch (err) {
+            console.error('Network error:', err);
+            setError('Network error. Please try again later.'); // Set network error message
         }
     };
+
     const [passwordVisible, setPasswordVisible] = useState(false);
 
     const togglePasswordVisibility = () => {
@@ -41,16 +50,15 @@ function Login() {
 
     return (
         <div className="container">
-            {/* <Navbar/> */}
             <div className="login-box">
                 <div className="sign-in-text">
                     Sign-in
                 </div>
                 <div className="email">
                     <input type="text" 
-                    placeholder="Enter username or email"  
-                    value={email} 
-                    onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter username or email"  
+                        value={emailOrUsername} 
+                        onChange={(e) => setEmailOrUsername(e.target.value)}
                     />
                 </div>
                 <div className="password">
@@ -67,6 +75,7 @@ function Login() {
                 <div className='forgot-password'>
                     <span className='forgot-password-text'>Forgot Password?</span>
                 </div>
+                {error && <div className="error-text">{error}</div>} {/* Display error message */}
                 <div className='sign-in-button'>
                     <button onClick={handleLogin} >Sign in</button>
                 </div>
