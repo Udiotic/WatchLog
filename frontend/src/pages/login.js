@@ -52,7 +52,7 @@ function Login() {
         <div className="container">
             <div className="login-box">
                 <div className="sign-in-text">
-                    Sign-in
+                    Sign in to WatchLog
                 </div>
                 <div className="email">
                     <input type="text" 

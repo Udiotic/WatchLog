@@ -6,6 +6,7 @@ require('dotenv').config();
 const uri = process.env.MONGO_URI || "your-mongodb-uri-here";
 const app = express();
 const PORT = process.env.PORT || 5000;
+const path = require('path');
 console.log('MongoDB URI:', process.env.MONGO_URI);
 
 
@@ -21,6 +22,8 @@ mongoose.connect(uri)
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/user', require('./routes/user')); // Ensure this line is added
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

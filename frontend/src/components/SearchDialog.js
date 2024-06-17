@@ -5,12 +5,13 @@ import { searchMovies, searchTVShows } from '../api/tmdbApi';
 import { searchGames } from '../api/rawgApi';
 import { searchBooks } from '../api/googlebooksApi';
 import { searchMusic } from '../api/lastfmApi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SearchDialog({ open, onClose, limit = 10 }) {
     const [category, setCategory] = useState('');
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
+    const navigate = useNavigate();
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
@@ -63,11 +64,16 @@ function SearchDialog({ open, onClose, limit = 10 }) {
 
     if (!open) return null;
 
+    const handleResultClick = (path) => {
+        onClose();
+        navigate(path);
+    };
+
     return (
-        <div className="dialog-overlay">
-            <div className="dialog-content">
+        <div className="search-dialog-overlay">
+            <div className="search-dialog-content">
                 Search
-                <button className="close-button" onClick={onClose}>X</button>
+                <button className="search-close-button" onClick={onClose}>X</button>
                 <div className="dialog-body">
                     <select value={category} onChange={handleCategoryChange} className='sel-category'>
                         <option value="" disabled>Select category</option>
@@ -89,12 +95,12 @@ function SearchDialog({ open, onClose, limit = 10 }) {
                                 <ul className="search-results">
                                     {results.map((result) => (
                                         <li key={result.id}>
-                                            <Link to={`/${category}/${result.id}`}>
+                                            <div onClick={() => handleResultClick(`/${category}/${result.id}`)}>
                                                 {result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image ? (
                                                     <img src={result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image} alt={result.title || result.name || result.volumeInfo.title || result.artist} />
                                                 ) : null}
                                                 <span className="result-title">{result.title || result.name || result.volumeInfo.title || result.artist}</span>
-                                            </Link>
+                                            </div>
                                         </li>
                                     ))}
                                 </ul>

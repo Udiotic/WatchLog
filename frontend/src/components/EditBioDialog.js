@@ -25,6 +25,7 @@ const EditBioDialog = ({ isOpen, onClose, bio, setUser }) => {
             const response = await axios.post('http://localhost:5000/api/user/bio', { bio: newBio }, config);
             setUser(response.data);
             onClose();
+            window.location.reload();
         } catch (error) {
             console.error('Error updating bio', error);
         }
@@ -35,7 +36,7 @@ const EditBioDialog = ({ isOpen, onClose, bio, setUser }) => {
     return (
         <div className="dialog-overlay2">
             <div className="dialog-content2">
-                <button className="close-button" onClick={onClose}>✖️</button>
+                <button className="close-button2" onClick={onClose}>✖️</button>
                 <form onSubmit={handleSubmit}>
                     <textarea
                         value={newBio}

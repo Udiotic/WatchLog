@@ -186,7 +186,26 @@ router.post('/toggle-playlist-music', auth, async (req, res) => {
     }
 });
 
-// Get user profile
+// Get user profile by username (publicly accessible)
+router.get('/profile/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username })
+            .select('-password')
+            .populate('followers', 'username pfp')
+            .populate('following', 'username pfp');
+
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        res.json(user);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
+// Get current user's profile (private)
 router.get('/profile', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
@@ -200,14 +219,8 @@ router.get('/profile', auth, async (req, res) => {
 const multer = require('multer');
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Update user bio
@@ -225,15 +238,61 @@ router.post('/bio', auth, async (req, res) => {
     }
 });
 
-// Upload avatar
 router.post('/avatar', auth, upload.single('avatar'), async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
-        user.pfp = req.file.path;
+        // Convert file buffer to Base64 string
+        const base64Image = req.file.buffer.toString('base64');
+
+        user.pfp = base64Image; // Store the Base64 string in the database
         await user.save();
         res.json(user);
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.post('/remove-avatar', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.pfp = null; // Remove the avatar from the database
+        await user.save();
+        res.json(user);
+    } catch (error) {
+        console.error('Error removing avatar:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Follow a user
+router.post('/follow/:id', auth, async (req, res) => {
+    try {
+        const userToFollow = await User.findById(req.params.id);
+        const currentUser = await User.findById(req.user.id);
+
+        if (!userToFollow || !currentUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (currentUser.following.includes(userToFollow._id)) {
+            // Unfollow
+            currentUser.following.pull(userToFollow._id);
+            userToFollow.followers.pull(currentUser._id);
+        } else {
+            // Follow
+            currentUser.following.push(userToFollow._id);
+            userToFollow.followers.push(currentUser._id);
+        }
+
+        await currentUser.save();
+        await userToFollow.save();
+
+        res.status(200).json({ followers: userToFollow.followers, following: currentUser.following });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error' });

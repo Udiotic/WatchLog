@@ -1,99 +1,142 @@
+    #body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+    }
 
+    .profile-page {
+        margin: 2%;
+        width: 90% auto;
+        padding: 2%;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.profile-page {
-    width: 90%;
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    flex-grow: 1;
-}
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 20px;
+        position: relative;
+    }
 
-.profile-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
+    .profile-left {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+    }
 
-.avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-right: 20px;
-    object-fit: cover;
-    border: 2px solid #ddd;
-}
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        margin-right: 20px;
+        object-fit: cover;
+        border: 2px solid #ddd;
+    }
 
-.profile-info {
-    flex: 1;
-}
+    .profile-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-grow: 1;
+    }
 
-.profile-info h1 {
-    font-size: 2.5rem;
-    margin: 0;
-    color: var(--body-color);
-}
+    .info-top {
+        display: flex;
+        align-items: center;
+    }
 
-.bio {
-    font-size: 1rem;
-    color: #666;
-    margin-top: 10px;
-}
+    .info-top-left {
+        display: flex;
+        align-items: center;
+    }
 
-.profile-content {
-    margin-top: 20px;
-}
+    .info-top h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        color: #333;
+    }
 
-.profile-content h2 {
-    font-size: 1.5rem;
-    margin-top: 20px;
-    color: var(--body-color);
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 5px;
-}
+    .follow-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin-left: 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
 
-.category-list, .favorites-list {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-    padding: 0;
-    margin: 10px 0;
-}
+    .follow-button:hover {
+        background-color: #333;
+    }
 
-.category-list li, .favorites-list li {
-    width: 150px;
-    margin: 10px;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
+    .followers-following {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 5%;
+        top: 20%;
+    }
 
-.category-list li:hover, .favorites-list li:hover {
-    transform: translateY(-5px);
-}
+    .followers-following div {
+        text-align: center;
+        margin-left: 20px;
+        padding: 1% 2%;
+    }
 
-.category-list img, .favorites-list img {
-    width: 100%;
-    height: 200px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    object-fit: cover;
-}
+    .followers-following span {
+        display: block;
+        font-size: 1rem;
+        color: #333;
+    }
 
-.category-list span, .favorites-list span {
-    display: block;
-    margin-top: 5px;
-    font-size: 0.9rem;
-    color: #333;
-    padding: 10px;
-}
+    .bio-container {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+    }
 
-.category-list a, .favorites-list a {
-    text-decoration: none;
-    color: inherit;
-}
+    .bio {
+        font-size: 1rem;
+        color: #333;
+    }
 
+    .edit-bio-button {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-left: 10px;
+    }
+
+    .profile-tabs {
+        display: flex;
+        justify-content: space-evenly;
+        margin-top: 20px;
+        background-color: black;
+        padding: 10px 0;
+        border-radius: 5px;
+    }
+
+    .profile-tab {
+        padding: 1% 2%;
+        cursor: pointer;
+        font-size: 1rem;
+        color: white;
+        background-color: black;
+        margin: 0 10px;
+        border-radius: 5px;
+    }
+
+    .profile-tab.active {
+        background-color: #666;
+    }
+
+    .profile-content {
+        margin-top: 20px;
+    }

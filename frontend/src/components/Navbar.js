@@ -56,9 +56,9 @@ function Navbar() {
                     <button className="log-button" onClick={openDialog}>Search</button>
                 </div>
                 <div className="userprofile">
-                    {dropdownOpen && (
+                    {dropdownOpen && user && (
                         <div className="dropdown-menu" onMouseLeave={toggleDropdown}>
-                            <Link to="/profile" className="dropdown-item">Profile</Link>
+                            <Link to={`/profile/${user.username}`} className="dropdown-item">Profile</Link>
                             <button className="dropdown-item" onClick={() => alert('Change Theme')}>Theme</button>
                             <button className="dropdown-item" onClick={handleLogout}>Logout</button>
                         </div>

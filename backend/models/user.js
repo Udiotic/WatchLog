@@ -27,11 +27,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    favorites: [{
-        id: { type: String },
-        title: { type: String },
-        poster_path: { type: String }
-    }],
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     watchedMovies: [{ type: Object }],
     watchlistMovies: [{ type: Object }],
     watchedTVShows: [{ type: Object }],
@@ -42,6 +39,14 @@ const UserSchema = new mongoose.Schema({
     gameList: [{ type: Object }],
     listenedMusic: [{ type: Object }],
     playlist: [{ type: Object }]
+});
+
+UserSchema.virtual('id').get(function() {
+    return this._id.toHexString();
+});
+
+UserSchema.set('toJSON', {
+    virtuals: true,
 });
 
 module.exports = mongoose.model('User', UserSchema);

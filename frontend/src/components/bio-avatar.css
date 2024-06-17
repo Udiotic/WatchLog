@@ -20,7 +20,7 @@
     position: relative;
 }
 
-.close-button {
+.close-button2{
     background: transparent;
     border: none;
     font-size: 1.5rem;
@@ -63,4 +63,20 @@
     border: 1px solid #ccc;
     font-size: 1rem;
     margin-top: 10px;
+}
+
+.remove-button {
+    width: 100%;
+    padding: 10px;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.remove-button:hover {
+    background: darkred;
 }

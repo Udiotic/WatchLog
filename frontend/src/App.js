@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './pages/login';
 import Signup from './pages/signup';
 import Landing from './pages/landing';
+import Films from './pages/films';
 import MovieDetails from './details/MovieDetails';
 import TVShowDetails from './details/TvshowDetails';
 import BookDetails from './details/BookDetails';
@@ -10,7 +11,7 @@ import GameDetails from './details/GameDetails';
 import MusicDetails from './details/MusicDetails';
 import { AuthProvider } from './context/authprovider';
 import Profile from './pages/profile';
-import VerifyEmail from './components/verifyEmail'
+import VerifyEmail from './components/verifyEmail';
 
 function App() {
   return (
@@ -25,8 +26,9 @@ function App() {
         <Route exact path="/books/:id" element={<BookDetails />} />
         <Route exact path="/games/:id" element={<GameDetails />} />
         <Route exact path="/music/:id" element={<MusicDetails />} />
-        <Route exact path="/profile" element={<Profile />} />
+        <Route exact path="/profile/:username" element={<Profile />} />
         <Route exact path="/verify-email" element={<VerifyEmail />} /> 
+        <Route exact path="/films" element = {<Films/>}/>
       </Routes>
     </AuthProvider>
   );

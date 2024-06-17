@@ -67,7 +67,7 @@ const GameDetails = () => {
                 </div>
             </div>
             <div className="poster-container">
-                <img src={game.background_image} alt={game.name} className="poster-image" />
+                <img src={game.background_image} alt={game.name} className="poster-image-games" />
             </div>
             <div className="options">
                 <button onClick={() => toggleItem('played')}>Played</button>

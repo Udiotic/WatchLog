@@ -1,40 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Navbar from '../components/Navbar';  // Adjust the path as necessary
-import EditBioDialog from '../components/EditBioDialog'; // Import the new EditBioDialog component
-import UploadAvatarDialog from '../components/UploadAvatarDialog'; // Import the new UploadAvatarDialog component
+import Navbar from '../components/Navbar';
+import EditBioDialog from '../components/EditBioDialog';
+import UploadAvatarDialog from '../components/UploadAvatarDialog';
+import FollowersDialog from '../components/FollowersDialog';
 import './profile.css';
+import defaultAvatar from '../images/default-avatar.png'; // Adjust the path accordingly
 
 const Profile = () => {
+    const { username } = useParams();
     const [user, setUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
     const [isEditBioOpen, setIsEditBioOpen] = useState(false);
     const [isUploadAvatarOpen, setIsUploadAvatarOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('Overview');
+    const [isFollowersDialogOpen, setIsFollowersDialogOpen] = useState(false);
+    const [isFollowingDialogOpen, setIsFollowingDialogOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found');
-                return;
-            }
-
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-auth-token': token
-                }
-            };
-
             try {
-                const response = await axios.get('http://localhost:5000/api/user/profile', config);
+                const response = await axios.get(`http://localhost:5000/api/user/profile/${username}`);
                 setUser(response.data);
+
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const config = {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-auth-token': token
+                        }
+                    };
+                    const currentUserResponse = await axios.get('http://localhost:5000/api/user/profile', config);
+                    setCurrentUser(currentUserResponse.data);
+                }
             } catch (error) {
                 console.error('Error fetching user profile', error);
             }
         };
         fetchUserProfile();
-    }, []);
+    }, [username]);
 
     const handleEditBioClick = () => {
         setIsEditBioOpen(true);
@@ -44,148 +51,94 @@ const Profile = () => {
         setIsUploadAvatarOpen(true);
     };
 
+    const handleFollowClick = async () => {
+        if (!currentUser) {
+            navigate('/login');
+            return;
+        }
+
+        try {
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-auth-token': localStorage.getItem('token')
+                }
+            };
+            const response = await axios.post(`http://localhost:5000/api/user/follow/${user._id}`, {}, config);
+            setUser(prevState => ({
+                ...prevState,
+                followers: response.data.followers
+            }));
+            setCurrentUser(prevState => ({
+                ...prevState,
+                following: response.data.following
+            }));
+        } catch (error) {
+            console.error('Error following/unfollowing user', error);
+        }
+    };
+
+    const handleFollowersClick = () => {
+        setIsFollowersDialogOpen(true);
+    };
+
+    const handleFollowingClick = () => {
+        setIsFollowingDialogOpen(true);
+    };
+
     if (!user) return <div className="loading">Loading...</div>;
 
-    const getPosterUrl = (posterPath) => {
-        return posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'default-image-url';
-    };
+    const avatarUrl = user.pfp ? `data:image/jpeg;base64,${user.pfp}` : defaultAvatar;
+
+    const isCurrentUser = currentUser && currentUser.username === user.username;
+    const isFollowing = currentUser && currentUser.following.some(f => f.toString() === user._id.toString());
 
     return (
         <div>
             <Navbar />
             <div className="profile-page">
                 <div className="profile-header">
-                    <img src={user.pfp || 'default-avatar.png'} alt="User Avatar" className="avatar" onClick={handleAvatarClick} />
-                    <div className="profile-info">
-                        <h1>{user.username}</h1>
-                        <div className="bio-container">
-                            <p className="bio">{user.bio || "This user hasn't written a bio yet."}</p>
-                            <button className="edit-bio-button" onClick={handleEditBioClick}>✏️</button>
+                    <div className="profile-left">
+                        <img src={avatarUrl} alt="User Avatar" className="avatar" onClick={isCurrentUser ? handleAvatarClick : null} />
+                        <div className="profile-info">
+                            <div className="info-top">
+                                <h1>{user.username}</h1>
+                                {!isCurrentUser && (
+                                    <button className="follow-button" onClick={handleFollowClick}>
+                                        {isFollowing ? 'Following' : 'Follow'}
+                                    </button>
+                                )}
+                                <div className="followers-following">
+                                    <div onClick={handleFollowersClick}>
+                                        <span>Followers</span>
+                                        <span>{user.followers ? user.followers.length : 0}</span>
+                                    </div>
+                                    <div onClick={handleFollowingClick}>
+                                        <span>Following</span>
+                                        <span>{user.following ? user.following.length : 0}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bio-container">
+                                <p className="bio">{user.bio || "This user hasn't written a bio yet."}</p>
+                                {isCurrentUser && <button className="edit-bio-button" onClick={handleEditBioClick}>✏️</button>}
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div className="profile-tabs">
+                    {['Overview', 'Movies', 'Shows', 'Books', 'Games', 'Music'].map(tab => (
+                        <div 
+                            key={tab} 
+                            className={`profile-tab ${activeTab === tab ? 'active' : ''}`} 
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab}
+                        </div>
+                    ))}
+                </div>
                 <div className="profile-content">
-                    <h2>Favorites</h2>
-                    <ul className="favorites-list">
-                        {user.favorites && user.favorites.map(fav => (
-                            <li key={fav.id}>
-                                <Link to={`/movies/${fav.id}`}>
-                                    <img src={getPosterUrl(fav.poster_path)} alt={fav.title} />
-                                    <span>{fav.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Watched Movies</h2>
-                    <ul className="category-list">
-                        {user.watchedMovies && user.watchedMovies.map(movie => (
-                            <li key={movie.id}>
-                                <Link to={`/movies/${movie.id}`}>
-                                    <img src={getPosterUrl(movie.poster_path)} alt={movie.title} />
-                                    <span>{movie.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Movie Watchlist</h2>
-                    <ul className="category-list">
-                        {user.watchlistMovies && user.watchlistMovies.map(movie => (
-                            <li key={movie.id}>
-                                <Link to={`/movies/${movie.id}`}>
-                                    <img src={getPosterUrl(movie.poster_path)} alt={movie.title} />
-                                    <span>{movie.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Watched TV Shows</h2>
-                    <ul className="category-list">
-                        {user.watchedTVShows && user.watchedTVShows.map(show => (
-                            <li key={show.id}>
-                                <Link to={`/tvshows/${show.id}`}>
-                                    <img src={getPosterUrl(show.poster_path)} alt={show.name} />
-                                    <span>{show.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>TV Show Watchlist</h2>
-                    <ul className="category-list">
-                        {user.watchlistTVShows && user.watchlistTVShows.map(show => (
-                            <li key={show.id}>
-                                <Link to={`/tvshows/${show.id}`}>
-                                    <img src={getPosterUrl(show.poster_path)} alt={show.name} />
-                                    <span>{show.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Read Books</h2>
-                    <ul className="category-list">
-                        {user.readBooks && user.readBooks.map(book => (
-                            <li key={book.id}>
-                                <Link to={`/books/${book.id}`}>
-                                    <img src={book.poster_path || 'default-image-url'} alt={book.title} />
-                                    <span>{book.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Reading List</h2>
-                    <ul className="category-list">
-                        {user.readingList && user.readingList.map(book => (
-                            <li key={book.id}>
-                                <Link to={`/books/${book.id}`}>
-                                    <img src={book.poster_path || 'default-image-url'} alt={book.title} />
-                                    <span>{book.title}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Played Games</h2>
-                    <ul className="category-list">
-                        {user.playedGames && user.playedGames.map(game => (
-                            <li key={game.id}>
-                                <Link to={`/games/${game.id}`}>
-                                    <img src={game.poster_path || 'default-image-url'} alt={game.name} />
-                                    <span>{game.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Game List</h2>
-                    <ul className="category-list">
-                        {user.gameList && user.gameList.map(game => (
-                            <li key={game.id}>
-                                <Link to={`/games/${game.id}`}>
-                                    <img src={game.poster_path || 'default-image-url'} alt={game.name} />
-                                    <span>{game.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Listened Music</h2>
-                    <ul className="category-list">
-                        {user.listenedMusic && user.listenedMusic.map(album => (
-                            <li key={album.id}>
-                                <Link to={`/music/${album.id}`}>
-                                    <img src={album.poster_path || 'default-image-url'} alt={album.name} />
-                                    <span>{album.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <h2>Playlist</h2>
-                    <ul className="category-list">
-                        {user.playlist && user.playlist.map(album => (
-                            <li key={album.id}>
-                                <Link to={`/music/${album.id}`}>
-                                    <img src={album.poster_path || 'default-image-url'} alt={album.name} />
-                                    <span>{album.name}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {/* Content for each tab will go here */}
                 </div>
             </div>
             <EditBioDialog
@@ -198,6 +151,18 @@ const Profile = () => {
                 isOpen={isUploadAvatarOpen}
                 onClose={() => setIsUploadAvatarOpen(false)}
                 setUser={setUser}
+            />
+            <FollowersDialog
+                open={isFollowersDialogOpen}
+                onClose={() => setIsFollowersDialogOpen(false)}
+                title="Followers"
+                users={user.followers || []}
+            />
+            <FollowersDialog
+                open={isFollowingDialogOpen}
+                onClose={() => setIsFollowingDialogOpen(false)}
+                title="Following"
+                users={user.following || []}
             />
         </div>
     );

@@ -37,21 +37,47 @@ const UploadAvatarDialog = ({ isOpen, onClose, setUser }) => {
             const response = await axios.post('http://localhost:5000/api/user/avatar', formData, config);
             setUser(response.data);
             onClose();
+            window.location.reload();
         } catch (error) {
             console.error('Error uploading avatar', error);
+        }
+    };
+
+    const handleRemoveAvatar = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error('No token found');
+            return;
+        }
+
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': token
+            }
+        };
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/user/remove-avatar', {}, config);
+            setUser(response.data);
+            onClose();
+            window.location.reload();
+        } catch (error) {
+            console.error('Error removing avatar', error);
         }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="dialog-overlay">
-            <div className="dialog-content">
-                <button className="close-button" onClick={onClose}>✖️</button>
+        <div className="dialog-overlay2">
+            <div className="dialog-content2">
+                <button className="close-button2" onClick={onClose}>✖️</button>
                 <form onSubmit={handleSubmit}>
                     <input type="file" onChange={handleFileChange} className="file-input" />
                     <button type="submit" className="submit-button">Upload Avatar</button>
                 </form>
+                <button onClick={handleRemoveAvatar} className="remove-button">Remove Avatar</button>
             </div>
         </div>
     );
