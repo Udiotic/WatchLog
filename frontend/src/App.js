@@ -4,6 +4,10 @@ import Login from './pages/login';
 import Signup from './pages/signup';
 import Landing from './pages/landing';
 import Films from './pages/films';
+import Games from './pages/games';
+import Books from './pages/books';
+import TVshows from './pages/tvshows';
+import Music from './pages/music';
 import MovieDetails from './details/MovieDetails';
 import TVShowDetails from './details/TvshowDetails';
 import BookDetails from './details/BookDetails';
@@ -29,6 +33,10 @@ function App() {
         <Route exact path="/profile/:username" element={<Profile />} />
         <Route exact path="/verify-email" element={<VerifyEmail />} /> 
         <Route exact path="/films" element = {<Films/>}/>
+        <Route exact path="/shows" element = {<TVshows/>}/>
+        <Route exact path="/books" element = {<Books/>}/>
+        <Route exact path="/games" element = {<Games/>}/>
+        <Route exact path="/music" element = {<Music/>}/>
       </Routes>
     </AuthProvider>
   );

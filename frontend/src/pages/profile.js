@@ -17,6 +17,7 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState('Overview');
     const [isFollowersDialogOpen, setIsFollowersDialogOpen] = useState(false);
     const [isFollowingDialogOpen, setIsFollowingDialogOpen] = useState(false);
+    const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -91,7 +92,7 @@ const Profile = () => {
     const avatarUrl = user.pfp ? `data:image/jpeg;base64,${user.pfp}` : defaultAvatar;
 
     const isCurrentUser = currentUser && currentUser.username === user.username;
-    const isFollowing = currentUser && currentUser.following.some(f => f.toString() === user._id.toString());
+    const isFollowing = currentUser && user.followers.some(follower => follower._id === currentUser._id);
 
     return (
         <div>

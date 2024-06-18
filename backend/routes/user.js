@@ -292,11 +292,18 @@ router.post('/follow/:id', auth, async (req, res) => {
         await currentUser.save();
         await userToFollow.save();
 
-        res.status(200).json({ followers: userToFollow.followers, following: currentUser.following });
+        const populatedUserToFollow = await User.findById(req.params.id).populate('followers', 'username pfp');
+        const populatedCurrentUser = await User.findById(req.user.id).populate('following', 'username pfp');
+
+        res.status(200).json({
+            followers: populatedUserToFollow.followers,
+            following: populatedCurrentUser.following
+        });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 module.exports = router;

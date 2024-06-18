@@ -113,7 +113,9 @@
         font-size: 1rem;
         margin-left: 10px;
     }
-
+    .edit-avatar-option{
+            
+    }
     .profile-tabs {
         display: flex;
         justify-content: space-evenly;

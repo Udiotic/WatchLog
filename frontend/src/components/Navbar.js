@@ -1,14 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
-import { FaRegUserCircle } from "react-icons/fa";
 import { useAuth } from '../context/authprovider';
-import SearchDialog from './SearchDialog'; // Import the new SearchDialog component
+import SearchDialog from './SearchDialog';
+import defaultAvatar from '../images/default-avatar-nav.png';
+import axios from 'axios';
+
 
 function Navbar() {
     const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [fullUser, setFullUser] = useState(null);
+
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            if (user) {
+                try {
+                    const response = await axios.get(`http://localhost:5000/api/user/profile/${user.username}`);
+                    setFullUser(response.data);
+                } catch (error) {
+                    console.error('Error fetching user profile', error);
+                }
+            }
+        };
+
+        fetchUserProfile();
+    }, [user]);
+
 
     const handleLogout = () => {
         logout();
@@ -26,6 +45,8 @@ function Navbar() {
     const closeDialog = () => {
         setDialogOpen(false);
     };
+
+    const avatarUrl = fullUser && fullUser.pfp ? `data:image/png;base64,${fullUser.pfp}` : defaultAvatar;
 
     return (
         <nav>
@@ -66,12 +87,12 @@ function Navbar() {
                     {user ? (
                         <div className="user-info">
                             <div className='logged-in' onMouseEnter={toggleDropdown}>
-                                <FaRegUserCircle size={30} color="white"/>
+                                <img src={avatarUrl} alt="User Avatar" className="avatar-icon" />
                                 <span className="username">{user.username}</span>
                             </div>
                         </div>
                     ) : (
-                        <span className='login-text'><Link to="/login">Login</Link></span>
+                        <button className='login-button'><Link to="/login">Sign In</Link></button>
                     )}
                 </div>
             </div>
