@@ -5,13 +5,14 @@ import { searchMovies, searchTVShows } from '../api/tmdbApi';
 import { searchGames } from '../api/rawgApi';
 import { searchBooks } from '../api/googlebooksApi';
 import { searchMusic } from '../api/lastfmApi';
-import { Link, useNavigate } from 'react-router-dom';
+import AddMovieDialog from './AddMovieDialog'; // Import AddMovieDialog
 
 function SearchDialog({ open, onClose, limit = 10 }) {
     const [category, setCategory] = useState('');
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-    const navigate = useNavigate();
+    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [showAddDialog, setShowAddDialog] = useState(false);
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
@@ -59,57 +60,74 @@ function SearchDialog({ open, onClose, limit = 10 }) {
             setCategory('');
             setQuery('');
             setResults([]);
+            setSelectedMovie(null);
         }
     }, [open]);
 
-    if (!open) return null;
+    if (!open && !showAddDialog) return null;
 
-    const handleResultClick = (path) => {
-        onClose();
-        navigate(path);
+    const handleResultClick = (result) => {
+        setSelectedMovie(result);
+        setShowAddDialog(true);
+    };
+
+    const handleAddMovieDialogClose = () => {
+        setSelectedMovie(null);
+        setShowAddDialog(false);
     };
 
     return (
-        <div className="search-dialog-overlay">
-            <div className="search-dialog-content">
-                Search
-                <button className="search-close-button" onClick={onClose}>X</button>
-                <div className="dialog-body">
-                    <select value={category} onChange={handleCategoryChange} className='sel-category'>
-                        <option value="" disabled>Select category</option>
-                        <option value="movies">Movies</option>
-                        <option value="tvshows">TV Shows</option>
-                        <option value="games">Games</option>
-                        <option value="books">Books</option>
-                        <option value="music">Music</option>
-                    </select>
-                    {category && (
-                        <div className="search-field">
-                            <input
-                                type="text"
-                                value={query}
-                                onChange={handleSearch}
-                                placeholder={`Search for ${category}...`}
-                            />
-                            {results.length > 0 && (
-                                <ul className="search-results">
-                                    {results.map((result) => (
-                                        <li key={result.id}>
-                                            <div onClick={() => handleResultClick(`/${category}/${result.id}`)}>
-                                                {result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image ? (
-                                                    <img src={result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image} alt={result.title || result.name || result.volumeInfo.title || result.artist} />
-                                                ) : null}
-                                                <span className="result-title">{result.title || result.name || result.volumeInfo.title || result.artist}</span>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
+        <>
+            {open && !showAddDialog && (
+                <div className="search-dialog-overlay">
+                    <div className="search-dialog-content">
+                        What do you wanna add?
+                        <button className="search-close-button" onClick={onClose}>X</button>
+                        <div className="dialog-body">
+                            <select value={category} onChange={handleCategoryChange} className='sel-category'>
+                                <option value="" disabled>Select category</option>
+                                <option value="movies">Movies</option>
+                                <option value="tvshows">TV Shows</option>
+                                <option value="games">Games</option>
+                                <option value="books">Books</option>
+                                <option value="music">Music</option>
+                            </select>
+                            {category && (
+                                <div className="search-field">
+                                    <input
+                                        type="text"
+                                        value={query}
+                                        onChange={handleSearch}
+                                        placeholder={`Search for ${category}...`}
+                                    />
+                                    {results.length > 0 && (
+                                        <ul className="search-results">
+                                            {results.map((result) => (
+                                                <li key={result.id}>
+                                                    <div onClick={() => handleResultClick(result)}>
+                                                        {result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image ? (
+                                                            <img src={result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image} alt={result.title || result.name || result.volumeInfo.title || result.artist} />
+                                                        ) : null}
+                                                        <span className="result-title">{result.title || result.name || result.volumeInfo.title || result.artist}</span>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
                             )}
                         </div>
-                    )}
+                    </div>
                 </div>
-            </div>
-        </div>
+            )}
+            {showAddDialog && selectedMovie && (
+                <AddMovieDialog
+                    open={showAddDialog}
+                    onClose={handleAddMovieDialogClose}
+                    movie={selectedMovie}
+                />
+            )}
+        </>
     );
 }
 

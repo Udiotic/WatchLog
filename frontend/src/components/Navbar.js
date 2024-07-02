@@ -1,17 +1,19 @@
-import React, { useState,useEffect } from 'react';
-import './Navbar.css';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authprovider';
-import SearchDialog from './SearchDialog';
 import defaultAvatar from '../images/default-avatar-nav.png';
-import axios from 'axios';
+import SearchDialog from './SearchDialog';
 
+import axios from 'axios';
+import './Navbar.css';
 
 function Navbar() {
     const { user, logout } = useAuth();
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
     const [fullUser, setFullUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -28,7 +30,6 @@ function Navbar() {
         fetchUserProfile();
     }, [user]);
 
-
     const handleLogout = () => {
         logout();
         window.location.href = '/landing';
@@ -38,6 +39,12 @@ function Navbar() {
         setDropdownOpen(!dropdownOpen);
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate(`/search-results/${searchQuery.trim()}`);
+        }
+    };
     const openDialog = () => {
         setDialogOpen(true);
     };
@@ -45,7 +52,6 @@ function Navbar() {
     const closeDialog = () => {
         setDialogOpen(false);
     };
-
     const avatarUrl = fullUser && fullUser.pfp ? `data:image/png;base64,${fullUser.pfp}` : defaultAvatar;
 
     return (
@@ -66,16 +72,26 @@ function Navbar() {
                             <Link to="/books">BOOKS</Link>
                         </li>
                         <li>
-                            <Link to="/music">MUSIC</Link>
+                            <Link to="/games">GAMES</Link>
                         </li>
                         <li>
-                            <Link to="/games">GAMES</Link>
+                            <Link to="/music">MUSIC</Link>
                         </li>
                     </ul>
                 </div>
                 <div className="logButton">
-                    <button className="log-button" onClick={openDialog}>Search</button>
+                    <button className="log-button" onClick={openDialog}><span className='plus'>+</span>ADD</button>
                 </div>
+                <form className="search-form" onSubmit={handleSearch}>
+                    <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="search-input"
+                    />
+                    <button type="submit" className="search-button">Search</button>
+                </form>
                 <div className="userprofile">
                     {dropdownOpen && user && (
                         <div className="dropdown-menu" onMouseLeave={toggleDropdown}>
@@ -92,7 +108,7 @@ function Navbar() {
                             </div>
                         </div>
                     ) : (
-                        <button className='login-button'><Link to="/login">Sign In</Link></button>
+                        <button className='login-button'><Link to="/login">Sign in</Link></button>
                     )}
                 </div>
             </div>

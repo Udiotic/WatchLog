@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, Routes, Route, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import EditBioDialog from '../components/EditBioDialog';
 import UploadAvatarDialog from '../components/UploadAvatarDialog';
 import FollowersDialog from '../components/FollowersDialog';
+import UserFilms from '../pages/user-films/User-films'; // Import UserFilms component
 import './profile.css';
 import defaultAvatar from '../images/default-avatar.png'; // Adjust the path accordingly
 
@@ -14,11 +15,14 @@ const Profile = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [isEditBioOpen, setIsEditBioOpen] = useState(false);
     const [isUploadAvatarOpen, setIsUploadAvatarOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('Overview');
     const [isFollowersDialogOpen, setIsFollowersDialogOpen] = useState(false);
     const [isFollowingDialogOpen, setIsFollowingDialogOpen] = useState(false);
-    const [isHoveringAvatar, setIsHoveringAvatar] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const validTabs = ['films', 'shows', 'books', 'games', 'music'];
+    const currentTab = location.pathname.split('/')[3]; // Updated to correctly capture the third segment of the URL
+    const activeTab = validTabs.includes(currentTab) ? currentTab : 'overview';
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -128,18 +132,36 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className="profile-tabs">
-                    {['Overview', 'Movies', 'Shows', 'Books', 'Games', 'Music'].map(tab => (
-                        <div 
-                            key={tab} 
-                            className={`profile-tab ${activeTab === tab ? 'active' : ''}`} 
-                            onClick={() => setActiveTab(tab)}
+                    <Link
+                        to={`/profile/${username}`}
+                        className={`profile-tab ${activeTab === 'overview' ? 'active' : ''}`}
+                        onClick={(e) => {
+                            if (activeTab === 'overview') {
+                                e.preventDefault();
+                            }
+                        }}
+                    >
+                        Overview
+                    </Link>
+                    {['Films', 'Shows', 'Books', 'Games', 'Music'].map(tab => (
+                        <Link
+                            key={tab}
+                            to={`/profile/${username}/${tab.toLowerCase()}`}
+                            className={`profile-tab ${activeTab === tab.toLowerCase() ? 'active' : ''}`}
                         >
                             {tab}
-                        </div>
+                        </Link>
                     ))}
                 </div>
                 <div className="profile-content">
-                    {/* Content for each tab will go here */}
+                    <Routes>
+                        <Route path="films/*" element={<UserFilms />} />
+                        <Route path="shows" element={<div>Shows Content</div>} />
+                        <Route path="books" element={<div>Books Content</div>} />
+                        <Route path="games" element={<div>Games Content</div>} />
+                        <Route path="music" element={<div>Music Content</div>} />
+                        <Route path="/" element={<div>Overview Content</div>} />
+                    </Routes>
                 </div>
             </div>
             <EditBioDialog

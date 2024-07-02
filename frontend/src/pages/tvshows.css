@@ -1,0 +1,86 @@
+/* tvshows.css */
+.tvshows-page {
+    background-color: var(--body-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tvshows-page-section {
+    width: 95%;
+    background-color: #1e2530;
+    border-radius: 10px;
+    margin-top: 2%;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.tvshows-page-section span {
+    font-size: 1.5rem;
+    color: #d7d3d3;
+}
+
+.tvshows-page-wrapper {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.tvshows-page-container {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    flex: 1;
+    scroll-behavior: smooth;
+    overflow: hidden; /* Hide horizontal scrollbar */
+}
+
+.tvshows-page-card {
+    background-color: #14181c;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    text-align: center;
+    flex: 0 0 auto; /* Ensure the card doesn't shrink */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.tvshows-page-card:hover {
+    transform: scale(1.05);
+}
+
+.tvshows-page-poster {
+    width: 100%;
+    height: 250px; /* Adjust height to fit the container */
+    object-fit: cover;
+}
+
+.scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    padding: 0 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.scroll-button.left {
+    left: -20px; /* Adjust position to be outside the box */
+}
+
+.scroll-button.right {
+    right: -20px; /* Adjust position to be outside the box */
+}
+
+.scroll-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}

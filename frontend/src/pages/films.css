@@ -1,0 +1,156 @@
+/* films.css */
+.films-page {
+    background-color: var(--body-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.films-page-movies-section {
+    width: 95%;
+    background-color: #1e2530;
+    border-radius: 10px;
+    margin-top: 2%;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.films-page-movies-section span {
+    font-size: 1.5rem;
+    color: #d7d3d3;
+}
+
+.films-page-movies-wrapper {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.films-page-movies-container {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    flex: 1;
+    scroll-behavior: smooth;
+    overflow: hidden; /* Hide horizontal scrollbar */
+}
+
+.films-page-movie-card {
+    background-color: #14181c;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 180px;
+    text-align: center;
+    flex: 0 0 auto; /* Ensure the card doesn't shrink */
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    position: relative; /* Add relative positioning */
+}
+
+.films-page-movie-card:hover {
+    transform: scale(1.05);
+}
+
+.films-page-movie-poster {
+    width: 100%;
+    height: 250px; /* Adjust height to fit the container */
+    object-fit: cover;
+}
+
+.movie-info {
+    padding: 10px;
+    color: #fff;
+}
+
+.movie-info h3 {
+    font-size: 1em;
+    margin: 10px 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-info p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.movie-icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Background for icon bar */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.films-page-movie-card:hover .movie-icons {
+    opacity: 1;
+}
+
+.icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.icon.watched:hover,
+.icon.watchlist:hover,
+.icon.favorite:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Highlight background */
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.icon.watched {
+    color: grey; /* Default color for not watched */
+}
+
+.icon.watched.watched {
+    color: green; /* Color for watched */
+}
+
+.icon.watchlist {
+    color: grey; /* Default color for not in watchlist */
+}
+
+.icon.favorite {
+    color: grey; /* Default color for not liked */
+}
+
+.icon.favorite.liked {
+    color: red; /* Color for liked */
+}
+
+.scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    font-size: 2rem;
+    padding: 0 10px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.scroll-button.left {
+    left: -20px; /* Adjust position to be outside the box */
+}
+
+.scroll-button.right {
+    right: -20px; /* Adjust position to be outside the box */
+}
+
+.scroll-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}

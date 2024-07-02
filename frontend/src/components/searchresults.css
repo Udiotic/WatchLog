@@ -1,0 +1,44 @@
+/* SearchResults.css */
+
+.search-results-page {
+    padding: 20px;
+}
+
+.search-results-page h2 {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.search-results-category {
+    margin-bottom: 20px;
+}
+
+.search-results-category h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.search-results-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-result-item {
+    width: 150px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.search-result-item img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.search-result-item span {
+    display: block;
+    margin-top: 5px;
+}

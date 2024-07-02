@@ -113,9 +113,7 @@
         font-size: 1rem;
         margin-left: 10px;
     }
-    .edit-avatar-option{
-            
-    }
+    
     .profile-tabs {
         display: flex;
         justify-content: space-evenly;
@@ -124,8 +122,9 @@
         padding: 10px 0;
         border-radius: 5px;
     }
-
+    
     .profile-tab {
+        text-decoration: none;
         padding: 1% 2%;
         cursor: pointer;
         font-size: 1rem;
@@ -135,8 +134,15 @@
         border-radius: 5px;
     }
 
+    .profile-tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        color: #FFF;
+    }
+    
     .profile-tab.active {
-        background-color: #666;
+        border-bottom: 3px solid #3498db; /* Blue underline */
+        color: #3498db; /* Match the underline color */
     }
 
     .profile-content {

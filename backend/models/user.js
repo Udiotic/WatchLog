@@ -1,5 +1,43 @@
 const mongoose = require('mongoose');
 
+const JournalEntrySchema = new mongoose.Schema({
+    movieId: { type: Number, required: true },
+    title: { type: String, required: true },
+    poster_path: { type: String },
+    rating: { type: Number },
+    date: { type: Date, required: true },
+    review: { type: String }
+});
+
+const ActivitySchema = new mongoose.Schema({
+    type: { type: String, required: true }, // 'watched', 'review', 'watchlist'
+    movieId: { type: Number, required: true },
+    title: { type: String, required: true },
+    poster_path: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+});
+
+const MovieSchema = new mongoose.Schema({
+    id: { type: Number, required: true },
+    title: { type: String, required: true },
+    poster_path: { type: String }
+});
+
+const FavoriteSchema = new mongoose.Schema({
+    movieId: { type: Number, required: true },
+    title: { type: String, required: true },
+    poster_path: { type: String },
+});
+
+const ListSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    movies: [MovieSchema],
+    tvShows: [MovieSchema],
+    books: [MovieSchema],
+    games: [MovieSchema],
+    music: [MovieSchema]
+});
+
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -29,8 +67,9 @@ const UserSchema = new mongoose.Schema({
     },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    watchedMovies: [{ type: Object }],
+    watchedMovies: [MovieSchema],
     watchlistMovies: [{ type: Object }],
+    journalEntries: [JournalEntrySchema],
     watchedTVShows: [{ type: Object }],
     watchlistTVShows: [{ type: Object }],
     readBooks: [{ type: Object }],
@@ -38,7 +77,16 @@ const UserSchema = new mongoose.Schema({
     playedGames: [{ type: Object }],
     gameList: [{ type: Object }],
     listenedMusic: [{ type: Object }],
-    playlist: [{ type: Object }]
+    playlist: [{ type: Object }],
+    lists: [ListSchema],
+    favoriteMovies: {
+        allTime: [FavoriteSchema],
+        year: [FavoriteSchema],
+        month: [FavoriteSchema],
+        week: [FavoriteSchema]
+    },
+    recentActivities: [ActivitySchema],
+    likedMovies: [MovieSchema],
 });
 
 UserSchema.virtual('id').get(function() {

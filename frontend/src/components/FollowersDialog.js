@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
 import './FollowersDialog.css';
 
