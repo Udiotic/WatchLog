@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 
 const JournalEntrySchema = new mongoose.Schema({
-    movieId: { type: Number, required: true },
+    movieId: { type: Number },
+    tvShowId: { type: Number },
     title: { type: String, required: true },
     poster_path: { type: String },
     rating: { type: Number },
     date: { type: Date, required: true },
-    review: { type: String }
+    review: { type: String },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 });
 
 const ActivitySchema = new mongoose.Schema({
-    type: { type: String, required: true }, // 'watched', 'review', 'watchlist'
-    movieId: { type: Number, required: true },
+    type: { type: String, required: true },
+    movieId: { type: Number },
+    tvShowId: { type: Number },
     title: { type: String, required: true },
     poster_path: { type: String, required: true },
     date: { type: Date, default: Date.now }
@@ -23,55 +26,49 @@ const MovieSchema = new mongoose.Schema({
     poster_path: { type: String }
 });
 
-const FavoriteSchema = new mongoose.Schema({
-    movieId: { type: Number, required: true },
+const TVShowSchema = new mongoose.Schema({
+    id: { type: Number, required: true },
     title: { type: String, required: true },
-    poster_path: { type: String },
+    poster_path: { type: String }
+});
+
+const FavoriteSchema = new mongoose.Schema({
+    movieId: { type: Number },
+    tvShowId: { type: Number },
+    title: { type: String, required: true },
+    poster_path: { type: String }
 });
 
 const ListSchema = new mongoose.Schema({
     name: { type: String, required: true },
     movies: [MovieSchema],
-    tvShows: [MovieSchema],
+    tvShows: [TVShowSchema],
     books: [MovieSchema],
     games: [MovieSchema],
     music: [MovieSchema]
 });
 
 const UserSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    isVerified: {
-        type: Boolean,
-        default: false
-    },
-    pfp: {
-        type: String,
-        required: false
-    },
-    bio: {
-        type: String,
-        required: false
-    },
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    isVerified: { type: Boolean, default: false },
+    pfp: { type: String, required: false },
+    bio: { type: String, required: false },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     watchedMovies: [MovieSchema],
     watchlistMovies: [{ type: Object }],
     journalEntries: [JournalEntrySchema],
-    watchedTVShows: [{ type: Object }],
-    watchlistTVShows: [{ type: Object }],
+    watchedTVShows: [TVShowSchema],
+    watchlistTVShows: [TVShowSchema],
+    watchingShows: [TVShowSchema],
+    favoriteShows: {
+        allTime: [FavoriteSchema],
+        year: [FavoriteSchema],
+        month: [FavoriteSchema],
+        week: [FavoriteSchema]
+    },
     readBooks: [{ type: Object }],
     readingList: [{ type: Object }],
     playedGames: [{ type: Object }],
@@ -86,7 +83,7 @@ const UserSchema = new mongoose.Schema({
         week: [FavoriteSchema]
     },
     recentActivities: [ActivitySchema],
-    likedMovies: [MovieSchema],
+    likedMovies: [MovieSchema]
 });
 
 UserSchema.virtual('id').get(function() {

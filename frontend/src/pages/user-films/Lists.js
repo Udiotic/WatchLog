@@ -35,7 +35,7 @@ const Lists = () => {
             <div className="header">
                 {loggedInUsername === username && (
                     <button className="create-list-button" onClick={() => setCreateListDialogOpen(true)}>
-                        Create List
+                        Create a List
                     </button>
                 )}
             </div>

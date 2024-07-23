@@ -93,6 +93,8 @@ const FilmsHome = () => {
             } catch (error) {
                 console.error('Error adding favorite movie:', error);
             }
+        } else {
+            setSearchDialogOpen(false);
         }
     };
 

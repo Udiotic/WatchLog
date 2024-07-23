@@ -79,10 +79,10 @@ function SearchDialog({ open, onClose, limit = 10 }) {
     return (
         <>
             {open && !showAddDialog && (
-                <div className="search-dialog-overlay">
-                    <div className="search-dialog-content">
+                <div className="favourites-search-dialog-overlay">
+                    <div className="favourites-search-dialog-content">
                         What do you wanna add?
-                        <button className="search-close-button" onClick={onClose}>X</button>
+                        <button className="favourites-search-close-button" onClick={onClose}>X</button>
                         <div className="dialog-body">
                             <select value={category} onChange={handleCategoryChange} className='sel-category'>
                                 <option value="" disabled>Select category</option>

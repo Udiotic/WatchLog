@@ -87,8 +87,8 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
-    background-color: rgba(0, 0, 0, 0.7); /* Background for icon bar */
+    padding: 10px 10px 10px 10px;
+    background-color: rgba(0, 0, 0, 0.945); /* Background for icon bar */
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -100,33 +100,39 @@
 .icon {
     font-size: 1.2rem;
     cursor: pointer;
+    padding: 5px; /* Ensure there's space for the background */
+    transition: background-color 0.3s ease;
 }
 
-.icon.watched:hover,
-.icon.watchlist:hover,
-.icon.favorite:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* Highlight background */
-    border-radius: 50%;
-    padding: 5px;
+.icon-watched:hover,
+.icon-watchlist:hover,
+.icon-favorite:hover {
+    background-color: rgba(1, 1, 1, 0.2); /* Highlight background */
+    border-radius: 5px; /* Square background */
+    transform: scale(1.25);
 }
 
-.icon.watched {
+.icon-watched {
     color: grey; /* Default color for not watched */
 }
 
-.icon.watched.watched {
+.icon-watched.watched {
     color: green; /* Color for watched */
 }
 
-.icon.watchlist {
+.icon-watchlist {
     color: grey; /* Default color for not in watchlist */
 }
 
-.icon.favorite {
+.icon-watchlist.watchlist {
+    color: blue; /* Color for in watchlist */
+}
+
+.icon-favorite {
     color: grey; /* Default color for not liked */
 }
 
-.icon.favorite.liked {
+.icon-favorite.liked {
     color: red; /* Color for liked */
 }
 

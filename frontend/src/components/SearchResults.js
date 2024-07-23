@@ -1,56 +1,59 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import './searchresults.css'; // Import CSS for styling
+import { useParams, useNavigate } from 'react-router-dom';
+import { searchMovies, searchTVShows } from '../api/tmdbApi';
+import { searchBooks } from '../api/googlebooksApi';
+import { searchGames } from '../api/rawgApi';
+import { searchMusic } from '../api/lastfmApi';
+import './searchresults.css';
 
 const SearchResults = () => {
-    const { query } = useParams();
-    const [results, setResults] = useState({ films: [], shows: [], books: [], games: [], music: [] });
+    const { category, query } = useParams();
+    const [results, setResults] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchSearchResults = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5000/api/search?query=${query}`);
-                setResults(response.data);
-            } catch (error) {
-                console.error('Error fetching search results:', error);
+        const fetchResults = async () => {
+            let results = [];
+            switch (category) {
+                case 'movies':
+                    results = await searchMovies(query);
+                    break;
+                case 'tvshows':
+                    results = await searchTVShows(query);
+                    break;
+                case 'books':
+                    results = await searchBooks(query);
+                    break;
+                case 'games':
+                    results = await searchGames(query);
+                    break;
+                case 'music':
+                    results = await searchMusic(query);
+                    break;
+                default:
+                    break;
             }
+            setResults(results);
         };
 
-        fetchSearchResults();
-    }, [query]);
+        fetchResults();
+    }, [category, query]);
+
+    const handleResultClick = (id) => {
+        navigate(`/${category}/${id}`);
+    };
 
     return (
-        <div className="search-results">
-            <h2>Search Results for "{query}"</h2>
-            <div className="category">
-                <h3>Films</h3>
-                {results.films.map(film => (
-                    <div key={film.id}>{film.title}</div>
-                ))}
-            </div>
-            <div className="category">
-                <h3>Shows</h3>
-                {results.shows.map(show => (
-                    <div key={show.id}>{show.name}</div>
-                ))}
-            </div>
-            <div className="category">
-                <h3>Books</h3>
-                {results.books.map(book => (
-                    <div key={book.id}>{book.volumeInfo.title}</div>
-                ))}
-            </div>
-            <div className="category">
-                <h3>Games</h3>
-                {results.games.map(game => (
-                    <div key={game.id}>{game.name}</div>
-                ))}
-            </div>
-            <div className="category">
-                <h3>Music</h3>
-                {results.music.map(album => (
-                    <div key={album.id}>{album.name}</div>
+        <div className="search-results-page">
+            <h2>Search Results for "{query}" in {category}</h2>
+            <div className="results-container">
+                {results.map(result => (
+                    <div key={result.id} className="result-card" onClick={() => handleResultClick(result.id)}>
+                        {result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image ? (
+                            <img src={result.poster_path || result.background_image || (result.volumeInfo && result.volumeInfo.imageLinks && result.volumeInfo.imageLinks.thumbnail) || result.image} alt={result.title || result.name || result.volumeInfo.title || result.artist} />
+                        ) : null}
+                        <span className="result-title">{result.title || result.name || result.volumeInfo.title || result.artist}</span>
+                    </div>
                 ))}
             </div>
         </div>

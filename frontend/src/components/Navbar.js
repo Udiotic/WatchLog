@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/authprovider';
 import defaultAvatar from '../images/default-avatar-nav.png';
-import SearchDialog from './SearchDialog';
-
+import { searchMovies, searchTVShows } from '../api/tmdbApi';
+import { searchGames } from '../api/rawgApi';
+import { searchBooks } from '../api/googlebooksApi';
+import { searchMusic } from '../api/lastfmApi';
 import axios from 'axios';
+import SearchDialog from './SearchDialog';
+import { debounce } from 'lodash';
 import './Navbar.css';
 
 function Navbar() {
@@ -12,8 +16,34 @@ function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [fullUser, setFullUser] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [category, setCategory] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const path = location.pathname.split('/')[1];
+        switch (path) {
+            case 'films':
+                setCategory('movies');
+                break;
+            case 'shows':
+                setCategory('tvshows');
+                break;
+            case 'books':
+                setCategory('books');
+                break;
+            case 'games':
+                setCategory('games');
+                break;
+            case 'music':
+                setCategory('music');
+                break;
+            default:
+                setCategory('');
+        }
+    }, [location]);
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -39,12 +69,56 @@ function Navbar() {
         setDropdownOpen(!dropdownOpen);
     };
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate(`/search-results/${searchQuery.trim()}`);
+            const results = await searchByCategory(category, searchQuery.trim());
+            setSearchResults(results);
+        } else {
+            setSearchResults([]);
         }
     };
+
+    const searchByCategory = async (category, query) => {
+        let results = [];
+        switch (category) {
+            case 'movies':
+                results = await searchMovies(query);
+                break;
+            case 'tvshows':
+                results = await searchTVShows(query);
+                break;
+            case 'books':
+                results = await searchBooks(query);
+                break;
+            case 'games':
+                results = await searchGames(query);
+                break;
+            case 'music':
+                results = await searchMusic(query);
+                break;
+            default:
+                break;
+        }
+        return results.sort((a, b) => b.popularity - a.popularity);
+    };
+
+    const debouncedSearch = useCallback(
+        debounce(async (query) => {
+            if (query.trim()) {
+                const results = await searchByCategory(category, query.trim());
+                setSearchResults(results);
+            } else {
+                setSearchResults([]);
+            }
+        }, 300),
+        [category]
+    );
+
+    useEffect(() => {
+        debouncedSearch(searchQuery);
+    }, [searchQuery, debouncedSearch]);
+
     const openDialog = () => {
         setDialogOpen(true);
     };
@@ -52,6 +126,7 @@ function Navbar() {
     const closeDialog = () => {
         setDialogOpen(false);
     };
+
     const avatarUrl = fullUser && fullUser.pfp ? `data:image/png;base64,${fullUser.pfp}` : defaultAvatar;
 
     return (
@@ -85,12 +160,21 @@ function Navbar() {
                 <form className="search-form" onSubmit={handleSearch}>
                     <input
                         type="text"
-                        placeholder="Search..."
+                        placeholder={category ? `Search ${category}...` : "Search..."}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="search-input"
+                        className="search-input-navbar"
                     />
-                    <button type="submit" className="search-button">Search</button>
+                    {searchResults.length > 0 && (
+                        <ul className="search-dropdown">
+                            {searchResults.map((result) => (
+                                <li key={result.id} onClick={() => navigate(`/${category}/${result.id}`)}>
+                                    <img src={result.poster_path || result.image || result.volumeInfo?.imageLinks?.thumbnail} alt={result.title || result.name || result.volumeInfo?.title || result.artist} />
+                                    <span>{result.title || result.name || result.volumeInfo?.title || result.artist}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </form>
                 <div className="userprofile">
                     {dropdownOpen && user && (

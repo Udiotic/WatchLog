@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import './watched.css';
-import { getMovieDetails } from '../../api/tmdbApi'; // Import the function to get movie details from TMDB
+import { getMovieDetails } from '../../api/tmdbApi';
+import MovieIconBar from '../../components/MovieIconBar';
 
 const Watched = () => {
     const { username } = useParams();
     const [watchedMovies, setWatchedMovies] = useState([]);
     const [sortType, setSortType] = useState('release_date');
     const [ascending, setAscending] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchWatchedMovies = async () => {
@@ -37,7 +39,7 @@ const Watched = () => {
                     valueB = new Date(b.release_date);
                     break;
                 case 'rating':
-                    valueA = a.vote_average || 0; // Use TMDB rating
+                    valueA = a.vote_average || 0;
                     valueB = b.vote_average || 0;
                     break;
                 case 'runtime':
@@ -60,6 +62,12 @@ const Watched = () => {
         return posterPath ? `https://image.tmdb.org/t/p/w500${posterPath}` : 'default-image-url';
     };
 
+    const handleMovieClick = (id, event) => {
+        if (!event.defaultPrevented) {
+            navigate(`/movies/${id}`);
+        }
+    };
+
     return (
         <div>
             <div className="sorting-controls">
@@ -79,11 +87,10 @@ const Watched = () => {
             </div>
             <div className="watched-movies">
                 {sortedMovies.map(movie => (
-                    <Link key={movie.id} to={`/movies/${movie.id}`}>
-                        <div className="movie-card">
-                            <img src={getPosterUrl(movie.poster_path)} alt={movie.title} className="movie-poster" />
-                        </div>
-                    </Link>
+                    <div key={movie.id} className="movie-card" onClick={(e) => handleMovieClick(movie.id, e)}>
+                        <img src={getPosterUrl(movie.poster_path)} alt={movie.title} className="movie-poster" />
+                        <MovieIconBar movie={movie} />
+                    </div>
                 ))}
             </div>
         </div>

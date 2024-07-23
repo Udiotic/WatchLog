@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import './journal.css';
-import EditJournalEntryDialog from './EditJournalEntryDialog'; // Import the dialog for editing
+import EditJournalEntryDialog from './EditJournalEntryDialog';
 
 const Journal = () => {
     const { username } = useParams();

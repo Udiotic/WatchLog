@@ -38,7 +38,7 @@ const UserFilms = () => {
                     </Link>
                 ))}
             </div>
-            <div className="main-content">
+            <div className="main-content-films">
                 <Routes>
                     <Route path="/" element={<FilmsHome />} />
                     <Route path="watched" element={<Watched />} />

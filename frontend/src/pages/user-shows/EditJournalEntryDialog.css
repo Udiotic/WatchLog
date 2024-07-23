@@ -1,0 +1,30 @@
+.edit-dialog .MuiDialog-paper {
+    background-color: #383d49;
+    color: white;
+    border-radius: 0.5rem;
+    padding: 2rem;
+}
+
+.edit-dialog .MuiDialogTitle-root {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.edit-dialog .MuiDialogContent-root {
+    padding: 1rem 0;
+}
+
+.edit-dialog .MuiTextField-root {
+    margin-bottom: 1rem;
+}
+
+.edit-dialog .MuiButtonBase-root {
+    background-color: #3498db;
+    color: white;
+    margin: 0 0.5rem;
+}
+
+.edit-dialog .MuiButtonBase-root:hover {
+    background-color: #2980b9;
+}

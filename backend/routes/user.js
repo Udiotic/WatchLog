@@ -338,7 +338,7 @@ router.post('/add-watched-movie', auth, async (req, res) => {
             user.watchedMovies.push({ id: movie.id, title: movie.title, poster_path: movie.poster_path });
         }
         
-        user.journalEntries.push({ movieId: movie.id, title: movie.title, poster_path: movie.poster_path, rating, date, review });
+        user.journalEntries.push({ movieId: movie.id, title: movie.title, poster_path: movie.poster_path, rating, date, review, user: req.user.id});
         await user.save();
         res.status(200).json(user.journalEntries);
     } catch (error) {
@@ -696,5 +696,369 @@ router.get('/liked-movies/:username', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
+
+// Endpoint to fetch reviews for a specific movie
+router.get('/reviews/movie/:movieId', async (req, res) => {
+    const { movieId } = req.params;
+
+    try {
+        const users = await User.find(
+            { 'journalEntries.movieId': parseInt(movieId) },
+            {
+                'journalEntries.$': 1,
+                username: 1,
+                pfp: 1
+            }
+        );
+
+        if (!users || users.length === 0) {
+            return res.status(404).json({ msg: 'No reviews found for this movie' });
+        }
+
+        const reviews = users.map(user => ({
+            ...user.journalEntries[0].toObject(),
+            user: {
+                _id: user._id,
+                username: user.username,
+                pfp: user.pfp
+            }
+        }));
+
+        res.json(reviews);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+// Fetch watched TV shows
+router.get('/watched-tvshows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('watchedTVShows');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.watchedTVShows);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch watchlist TV shows
+router.get('/watchlist-tvshows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('watchlistTVShows');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.watchlistTVShows);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+// Add a watched TV show
+router.post('/add-watched-tvshow', auth, async (req, res) => {
+    const { tvshow, rating, date, review } = req.body;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const existingTVShow = user.watchedTVShows.find(s => s.id === tvshow.id);
+        if (!existingTVShow) {
+            user.watchedTVShows.push({ id: tvshow.id, title: tvshow.title, poster_path: tvshow.poster_path });
+        }
+        
+        user.journalEntries.push({ tvShowId: tvshow.id, title: tvshow.title, poster_path: tvshow.poster_path, rating, date, review, user: req.user.id });
+        await user.save();
+        res.status(200).json(user.journalEntries);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get journal entries for TV shows
+router.get('/journal-entries-tvshows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('journalEntries');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.journalEntries.filter(entry => entry.tvShowId));
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Update a journal entry for TV shows
+router.put('/update-journal-entry-tvshows', auth, async (req, res) => {
+    const { entryId, rating, review } = req.body;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const entry = user.journalEntries.id(entryId);
+        if (!entry || !entry.tvShowId) return res.status(404).json({ message: 'Entry not found' });
+
+        entry.rating = rating;
+        entry.review = review;
+        await user.save();
+
+        res.status(200).json(user.journalEntries);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a journal entry for TV shows
+router.delete('/delete-journal-entry-tvshows/:id', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const entryId = req.params.id;
+        user.journalEntries = user.journalEntries.filter(entry => entry._id.toString() !== entryId || !entry.tvShowId);
+
+        await user.save();
+        res.status(200).json({ message: 'Journal entry deleted successfully' });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Add a new TV show list
+router.post('/add-tvshow-list', auth, async (req, res) => {
+    const { name } = req.body;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const newList = { name, tvShows: [] };
+        user.lists.push(newList);
+        await user.save();
+        res.status(200).json(user.lists);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Add a TV show to a TV show list
+router.post('/add-tvshow-to-list', auth, async (req, res) => {
+    const { listId, tvshow } = req.body;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const list = user.lists.id(listId);
+        if (!list) return res.status(404).json({ message: 'List not found' });
+
+        if (!list.tvShows.some(s => s.id === tvshow.id)) {
+            list.tvShows.push(tvshow);
+            await user.save();
+        }
+
+        res.status(200).json(list);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get TV show lists by username
+router.get('/tvshow-lists/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('lists');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.lists.filter(list => list.tvShows.length > 0));
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get a TV show list by its name
+router.get('/tvshow-list/:username/:listName', async (req, res) => {
+    try {
+        const { username, listName } = req.params;
+        const user = await User.findOne({ username }).select('lists');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        const list = user.lists.find(list => list.name === listName && list.tvShows.length > 0);
+        if (!list) return res.status(404).json({ message: 'List not found' });
+
+        res.json(list);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Delete a TV show list
+router.delete('/delete-tvshow-list/:listId', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        // Find the list by ID and remove it
+        const listIndex = user.lists.findIndex(list => list.id === req.params.listId && list.tvShows.length > 0);
+        if (listIndex === -1) return res.status(404).json({ message: 'List not found' });
+
+        user.lists.splice(listIndex, 1);
+        await user.save();
+
+        res.status(200).json({ message: 'List deleted successfully' });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get recent activities
+router.get('/recent-activities-tvshows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('recentActivities');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.recentActivities.filter(activity => activity.tvShowId));
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+// Add a recent activity for TV shows
+router.post('/add-recent-activity-tvshows', auth, async (req, res) => {
+    const { activity } = req.body;
+    try {
+        await addRecentActivity(req.user.id, activity);
+        res.status(200).json({ message: 'Activity added successfully' });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch completed shows
+router.get('/completed-shows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('watchedTVShows');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.watchedTVShows);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch favorite shows by timeframe
+router.get('/favorite-shows/:username/:timeframe', async (req, res) => {
+    const { username, timeframe } = req.params;
+    try {
+        const user = await User.findOne({ username }).select(`favoriteShows.${timeframe}`);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.favoriteShows[timeframe]);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch watching shows
+router.get('/watching-shows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('watchingShows');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.watchingShows);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+router.get('/watchlist-shows/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('watchlistTVShows');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.watchlistTVShows);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get user-created show lists
+router.get('/show-lists/:username', async (req, res) => {
+    try {
+        const user = await User.findOne({ username: req.params.username }).select('lists');
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        
+        const showLists = user.lists.map(list => ({
+            name: list.name,
+            tvShows: list.tvShows
+        }));
+
+        res.json(showLists);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Add a favorite show
+router.post('/favorite-shows/:timeframe', auth, async (req, res) => {
+    const { show } = req.body;
+    const { timeframe } = req.params;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        if (!user.favoriteShows[timeframe]) {
+            user.favoriteShows[timeframe] = [];
+        }
+
+        if (!user.favoriteShows[timeframe].some(s => s.showId === show.showId)) {
+            user.favoriteShows[timeframe].push(show);
+            await user.save();
+        }
+
+        res.status(200).json(user.favoriteShows[timeframe]);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Remove a favorite show
+router.post('/remove-favorite-show/:timeframe', auth, async (req, res) => {
+    const { showId } = req.body;
+    const { timeframe } = req.params;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.favoriteShows[timeframe] = user.favoriteShows[timeframe].filter(show => show.showId !== showId);
+        await user.save();
+
+        res.status(200).json(user.favoriteShows[timeframe]);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Get favorite shows by timeframe
+router.get('/favorite-shows/:username/:timeframe', async (req, res) => {
+    const { username, timeframe } = req.params;
+    try {
+        const user = await User.findOne({ username }).select(`favoriteShows.${timeframe}`);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+        res.json(user.favoriteShows[timeframe]);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
 
 module.exports = router;

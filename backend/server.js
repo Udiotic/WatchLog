@@ -7,6 +7,7 @@ const uri = process.env.MONGO_URI || "your-mongodb-uri-here";
 const app = express();
 const PORT = process.env.PORT || 5000;
 const path = require('path');
+
 console.log('MongoDB URI:', process.env.MONGO_URI);
 
 

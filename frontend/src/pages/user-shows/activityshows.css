@@ -1,0 +1,41 @@
+.activity-page-shows {
+    padding: 20px;
+}
+
+.activity-page-shows h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.activity-item-show {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s;
+}
+
+.activity-item-show:hover {
+    background-color: #ececec;
+}
+
+.activity-details-show {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-details-show p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.activity-details-show span {
+    margin-top: 5px;
+    color: #888;
+    font-size: 0.875rem;
+}

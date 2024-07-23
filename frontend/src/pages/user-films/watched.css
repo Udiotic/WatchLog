@@ -1,4 +1,3 @@
-/* Watched.css */
 .watched-movies {
     display: flex;
     flex-wrap: wrap;
@@ -13,6 +12,7 @@
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.2s;
+    position: relative; /* Ensure positioning context for the icons */
 }
 
 .movie-card:hover {
@@ -53,4 +53,34 @@
 
 .sort-toggle:hover {
     background-color: #2980b9;
+}
+
+.movie-icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1; /* Ensure it appears above the card but not above other important UI elements */
+}
+
+.movie-card-watchlist:hover .movie-icons, .movie-card:hover .movie-icons {
+    opacity: 1;
+}
+
+.icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
 }

@@ -1,4 +1,4 @@
-.search-dialog-overlay {
+.favourites-search-dialog-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -10,7 +10,7 @@
     align-items: center;
 }
 
-.search-dialog-content {
+.favourites-search-dialog-content {
     background: rgb(56, 61, 73);
     padding: 2rem;
     border-radius: 0.5rem;
@@ -20,7 +20,7 @@
     color: white;
 }
 
-.search-close-button {
+.favourites-search-close-button {
     background: transparent;
     border: none;
     font-size: 1.5rem;
@@ -46,6 +46,7 @@
 }
 
 .search-field {
+    width: 100%;
     position: relative;
     margin: 1rem 0;
 }

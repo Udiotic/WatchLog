@@ -5,6 +5,9 @@ import { getMovieDetails } from '../api/tmdbApi';
 import './Details.css';
 import Navbar from "../components/Navbar";
 import AddToListDialog from './AddToListDialog'; // Import the dialog
+import defaultAvatar from '../images/default-avatar.png'; // Adjust the path accordingly
+import { TbClockCheck } from 'react-icons/tb';
+
 
 const MovieDetails = () => {
     const { id } = useParams();
@@ -13,6 +16,7 @@ const MovieDetails = () => {
     const [addToListDialogOpen, setAddToListDialogOpen] = useState(false);
     const [isWatched, setIsWatched] = useState(false); // State to track if the movie is watched
     const [isInWatchlist, setIsInWatchlist] = useState(false); // State to track if the movie is in watchlist
+    const [reviews, setReviews] = useState([]);
     const username = localStorage.getItem('username'); // Assuming username is stored in local storage
 
     useEffect(() => {
@@ -20,7 +24,6 @@ const MovieDetails = () => {
             const details = await getMovieDetails(id);
             setMovie(details);
         };
-        fetchMovieDetails();
 
         const fetchUserLists = async () => {
             if (username) {
@@ -38,7 +41,6 @@ const MovieDetails = () => {
                 }
             }
         };
-        fetchUserLists();
 
         const checkIfWatched = async () => {
             if (username) {
@@ -76,8 +78,26 @@ const MovieDetails = () => {
             }
         };
 
+        const fetchReviews = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get(`http://localhost:5000/api/user/reviews/movie/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token
+                    }
+                });
+                setReviews(response.data);
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+            }
+        };
+
+        fetchMovieDetails();
+        fetchUserLists();
         checkIfWatched();
         checkIfInWatchlist();
+        fetchReviews();
     }, [id, username]);
 
     const toggleItem = async (listType) => {
@@ -134,45 +154,95 @@ const MovieDetails = () => {
     if (!movie) return <div>Loading...</div>;
 
     return (
-        <div>
+        <div className="movie-details-page">
             <Navbar />
-            <div className="details-page">
-                <div className="content">
-                    <div className="details-header">
-                        <h1>{movie.title}</h1>
-                        <span className="release-year">{movie.release_date.substring(0, 4)}</span>
+            <div className="content-wrapper">
+                <div className="main-content">
+                    <div className="movie-info">
+                        <div className="title-section">
+                            <h1>{movie.title}</h1>
+                            <span className="year">{movie.release_date.substring(0, 4)}</span>
+                            <span className="runtime">{movie.runtime} Minutes</span>
+                        </div>
+                            <span className="director">
+                                Directed by: {movie.credits.crew.filter(member => member.job === 'Director').map(director => director.name).join(', ')}
+                            </span>
+                        <p className="movie-overview">{movie.overview}</p>
                     </div>
-                    <div className="details-body">
-                        <div className="summary">{movie.overview}</div>
+                    <div className="poster-and-cast">
+                        <div className="poster-container">
+                            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="poster-image" />
+                        </div>
+                        <div className="cast-container">
+                            <h2>Cast</h2>
+                            <div className="cast-list">
+                                {movie.credits.cast.slice(0, 9).map(member => (
+                                    <div key={member.cast_id} className="cast-member">
+                                        <img src={member.profile_path ? `https://image.tmdb.org/t/p/w200${member.profile_path}` : defaultAvatar} alt={member.name} />
+                                        <p>{member.name} as {member.character}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="poster-container">
-                    <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="poster-image" />
-                </div>
-                <div className="options">
-                    <button 
-                        className={isWatched ? 'watched-button' : ''} 
+                <div className="options-tab">
+                    <h2>Options</h2>
+                    <button
+                        className={isWatched ? 'watched-button' : ''}
                         onClick={() => toggleItem('watched')}
                     >
-                        {isWatched ? '✔ Watched': 'Watched?'}
+                        {isWatched ? '✔ Watched' : 'Watched?'}
                     </button>
-                    <button 
-                        className={isInWatchlist ? 'watchlist-button' : ''} 
+                    <button
+                        className={isInWatchlist ? 'watchlist-button' : ''}
                         onClick={() => toggleItem('watchlist')}
                     >
+                        {/* <TbClockCheck/> */}
                         {isInWatchlist ? '✔ Added to Watchlist' : 'Add to Watchlist'}
                     </button>
                     <button onClick={handleAddToList}>Add to List</button>
                 </div>
-                {addToListDialogOpen && (
-                    <AddToListDialog
-                        open={addToListDialogOpen}
-                        onClose={handleAddToListDialogClose}
-                        movie={movie}
-                        lists={lists}
-                    />
-                )}
             </div>
+            <div className="reviews-section">
+    <h2>Popular Reviews</h2>
+    {reviews.length > 0 ? (
+        reviews.map(review => (
+            <div key={review._id} className="review">
+                <div className="review-header">
+                    <img 
+                        src={review.user.pfp ? `data:image/png;base64,${review.user.pfp}` : defaultAvatar} 
+                        alt={review.user.username} 
+                        className="review-avatar" 
+                    />
+                    <div className="review-header-text">
+                        <span className="review-username">Review by {review.user.username}</span>
+                        <span className="rating">★★★½</span>
+                    </div>
+                </div>
+                <p>{review.review}</p>
+                <div className="review-footer">
+                    <span className="like-review">
+                        {/* Add your like icon SVG here */}
+                        Like review
+                    </span>
+                    <span className="likes-count">{review.likes || 0} likes</span>
+                    <span className="comment-count">{review.comments || 0}</span>
+                </div>
+            </div>
+        ))
+    ) : (
+        <p>No reviews yet</p>
+    )}
+</div>
+            {addToListDialogOpen && (
+                <AddToListDialog
+                    open={addToListDialogOpen}
+                    onClose={handleAddToListDialogClose}
+                    movie={movie}
+                    lists={lists}
+                />
+            )}
         </div>
     );
 };

@@ -35,19 +35,25 @@ export const searchTVShows = async (query, limit = 10) => {
 
 export const getMovieDetails = async (movieId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/movie/${movieId}`, {
-      params: {
-        api_key: API_KEY,
-        append_to_response: 'credits'
-      },
-    });
-    return response.data;
+      const response = await axios.get(`${BASE_URL}/movie/${movieId}`, {
+          params: {
+              api_key: API_KEY,
+              append_to_response: 'credits'
+          },
+      });
+      const movie = response.data;
+      const cast = movie.credits.cast.map(member => ({
+          id: member.id,
+          name: member.name,
+          character: member.character,
+          profile_path: member.profile_path,
+      }));
+      return { ...movie, cast };
   } catch (error) {
-    console.error('Error fetching movie details:', error);
-    return null;
+      console.error('Error fetching movie details:', error);
+      return null;
   }
 };
-
 export const getTVShowDetails = async (tvShowId) => {
   try {
     const response = await axios.get(`${BASE_URL}/tv/${tvShowId}`, {
@@ -138,3 +144,4 @@ export const getUpcomingTVShows = async () => {
       return [];
   }
 };
+

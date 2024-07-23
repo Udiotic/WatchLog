@@ -221,3 +221,57 @@ nav {
 .search-button:hover {
     background-color: var(--hover-color);
 }
+
+/* Add the following styles at the bottom of your Navbar.css */
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 300px; /* Adjust width */
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #1c1c1c; /* Better background color */
+    border: 1px solid #444; /* Border color */
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-dropdown li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #fff; /* Text color */
+}
+
+.search-dropdown li:hover {
+    background-color: #333; /* Hover background color */
+}
+
+.search-dropdown img {
+    width: 40px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    margin: 0 1rem;
+    position: relative; /* Add this to make search-dropdown relative */
+}
+
+.search-input-navbar {
+    width: 12rem; /* Increase the width */
+    padding: 0.3rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+/* Remove the search button, hence no styles for it */
+

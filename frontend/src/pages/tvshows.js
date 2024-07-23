@@ -26,26 +26,6 @@ function TVShows() {
         fetchUpcomingTVShows();
     }, []);
 
-    useEffect(() => {
-        const handleWheelScroll = (e, ref) => {
-            e.preventDefault();
-            ref.current.scrollBy({
-                left: e.deltaY < 0 ? -20 : 20,
-                behavior: 'smooth'
-            });
-        };
-
-        const popularContainer = popularTVShowsRef.current;
-        popularContainer.addEventListener('wheel', (e) => handleWheelScroll(e, popularTVShowsRef), { passive: false });
-
-        const upcomingContainer = upcomingTVShowsRef.current;
-        upcomingContainer.addEventListener('wheel', (e) => handleWheelScroll(e, upcomingTVShowsRef), { passive: false });
-
-        return () => {
-            popularContainer.removeEventListener('wheel', (e) => handleWheelScroll(e, popularTVShowsRef));
-            upcomingContainer.removeEventListener('wheel', (e) => handleWheelScroll(e, upcomingTVShowsRef));
-        };
-    }, []);
 
     const scroll = (direction, ref) => {
         const scrollAmount = 1000; // Adjust scroll amount as needed

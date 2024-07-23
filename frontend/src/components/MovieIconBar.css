@@ -1,0 +1,31 @@
+.movie-icons {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: rgb(0, 0, 0);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.movie-card:hover .movie-icons {
+    opacity: 1;
+}
+
+.icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.icon-watched:hover,
+.icon-watchlist:hover,
+.icon-favorite:hover {
+    background-color: rgba(1, 1, 1, 0.2);
+    border-radius: 5px;
+    transform: scale(1.25);
+}

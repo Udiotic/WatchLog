@@ -5,9 +5,10 @@ import Navbar from '../components/Navbar';
 import EditBioDialog from '../components/EditBioDialog';
 import UploadAvatarDialog from '../components/UploadAvatarDialog';
 import FollowersDialog from '../components/FollowersDialog';
-import UserFilms from '../pages/user-films/User-films'; // Import UserFilms component
+import UserFilms from '../pages/user-films/User-films';
+import UserShows from '../pages/user-shows/User-shows'; // Import UserShows component
 import './profile.css';
-import defaultAvatar from '../images/default-avatar.png'; // Adjust the path accordingly
+import defaultAvatar from '../images/default-avatar.png';
 
 const Profile = () => {
     const { username } = useParams();
@@ -21,7 +22,7 @@ const Profile = () => {
     const location = useLocation();
 
     const validTabs = ['films', 'shows', 'books', 'games', 'music'];
-    const currentTab = location.pathname.split('/')[3]; // Updated to correctly capture the third segment of the URL
+    const currentTab = location.pathname.split('/')[3];
     const activeTab = validTabs.includes(currentTab) ? currentTab : 'overview';
 
     useEffect(() => {
@@ -156,7 +157,7 @@ const Profile = () => {
                 <div className="profile-content">
                     <Routes>
                         <Route path="films/*" element={<UserFilms />} />
-                        <Route path="shows" element={<div>Shows Content</div>} />
+                        <Route path="shows/*" element={<UserShows />} /> // Updated to use UserShows
                         <Route path="books" element={<div>Books Content</div>} />
                         <Route path="games" element={<div>Games Content</div>} />
                         <Route path="music" element={<div>Music Content</div>} />
