@@ -22,7 +22,7 @@ const EditBioDialog = ({ isOpen, onClose, bio, setUser }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/user/bio', { bio: newBio }, config);
+            const response = await axios.post('http://localhost:5001/api/user/bio', { bio: newBio }, config);
             setUser(response.data);
             onClose();
             window.location.reload();

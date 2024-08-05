@@ -37,8 +37,8 @@ const GameDetails = () => {
             };
 
             const url = listType === 'played'
-                ? 'http://localhost:5000/api/user/toggle-played-games'
-                : 'http://localhost:5000/api/user/toggle-gamelist-games';
+                ? 'http://localhost:5001/api/user/toggle-played-games'
+                : 'http://localhost:5001/api/user/toggle-gamelist-games';
 
             const response = await axios.post(url, log, config);
             console.log('Response:', response);

@@ -13,7 +13,7 @@ const Journal = () => {
     useEffect(() => {
         const fetchJournalEntries = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/journal-entries/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/journal-entries/${username}`);
                 setJournalEntries(response.data);
             } catch (error) {
                 console.error('Error fetching journal entries:', error);
@@ -24,7 +24,7 @@ const Journal = () => {
             const token = localStorage.getItem('token');
             if (token) {
                 try {
-                    const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
+                    const profileResponse = await axios.get('http://localhost:5001/api/user/profile', {
                         headers: { 'x-auth-token': token }
                     });
                     setCurrentUser(profileResponse.data);
@@ -46,7 +46,7 @@ const Journal = () => {
         }
 
         try {
-            await axios.delete(`http://localhost:5000/api/user/delete-journal-entry/${entryId}`, {
+            await axios.delete(`http://localhost:5001/api/user/delete-journal-entry/${entryId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-auth-token': token

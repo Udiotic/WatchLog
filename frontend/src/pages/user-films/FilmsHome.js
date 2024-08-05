@@ -23,19 +23,19 @@ const FilmsHome = () => {
             try {
                 const token = localStorage.getItem('token');
 
-                const watchedResponse = await axios.get(`http://localhost:5000/api/user/watched-movies/${username}`, {
+                const watchedResponse = await axios.get(`http://localhost:5001/api/user/watched-movies/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const watchlistResponse = await axios.get(`http://localhost:5000/api/user/watchlist-movies/${username}`, {
+                const watchlistResponse = await axios.get(`http://localhost:5001/api/user/watchlist-movies/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const listsResponse = await axios.get(`http://localhost:5000/api/user/movie-lists/${username}`, {
+                const listsResponse = await axios.get(`http://localhost:5001/api/user/movie-lists/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const journalResponse = await axios.get(`http://localhost:5000/api/user/journal-entries/${username}`, {
+                const journalResponse = await axios.get(`http://localhost:5001/api/user/journal-entries/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
@@ -55,7 +55,7 @@ const FilmsHome = () => {
         const checkCurrentUser = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5000/api/user/profile', {
+                const response = await axios.get('http://localhost:5001/api/user/profile', {
                     headers: { 'x-auth-token': token }
                 });
                 setIsCurrentUser(response.data.username === username);
@@ -71,7 +71,7 @@ const FilmsHome = () => {
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/favorite-movies/${username}/${timeframe}`);
+                const response = await axios.get(`http://localhost:5001/api/user/favorite-movies/${username}/${timeframe}`);
                 setFavorites(response.data);
             } catch (error) {
                 console.error('Error fetching favorite movies:', error);
@@ -85,7 +85,7 @@ const FilmsHome = () => {
         if (movie) {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.post(`http://localhost:5000/api/user/favorite-movies/${timeframe}`, { movie }, {
+                const response = await axios.post(`http://localhost:5001/api/user/favorite-movies/${timeframe}`, { movie }, {
                     headers: { 'x-auth-token': token }
                 });
                 setFavorites(response.data);
@@ -101,7 +101,7 @@ const FilmsHome = () => {
     const handleRemoveFavorite = async (movieId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`http://localhost:5000/api/user/remove-favorite-movie/${timeframe}`, { movieId }, {
+            const response = await axios.post(`http://localhost:5001/api/user/remove-favorite-movie/${timeframe}`, { movieId }, {
                 headers: { 'x-auth-token': token }
             });
             setFavorites(response.data);

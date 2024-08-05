@@ -14,7 +14,7 @@ const WatchlistShows = () => {
     useEffect(() => {
         const fetchWatchlistShows = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/watchlist-shows/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/watchlist-shows/${username}`);
                 const showsWithDetails = await Promise.all(response.data.map(async (show) => {
                     const details = await getTVShowDetails(show.id);
                     return { ...show, ...details };

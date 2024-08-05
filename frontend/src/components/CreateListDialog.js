@@ -14,7 +14,7 @@ function CreateListDialog({ open, onClose }) {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/user/add-movie-list',
+                'http://localhost:5001/api/user/add-movie-list',
                 { name: listName },
                 {
                     headers: {

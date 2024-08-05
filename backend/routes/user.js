@@ -1059,6 +1059,61 @@ router.get('/favorite-shows/:username/:timeframe', async (req, res) => {
     }
 });
 
-
+// Get user's media collections
+router.get('/:userId/media', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      if (!user) return res.status(404).json({ message: 'User not found' });
+      
+      res.json({
+        readBooks: user.readBooks,
+        readingList: user.readingList,
+        playedGames: user.playedGames,
+        gameList: user.gameList,
+        listenedMusic: user.listenedMusic,
+        playlist: user.playlist,
+      });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
+  
+  // Add a book to user's collection
+  router.post('/:userId/books', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      user.readBooks.push(req.body);
+      await user.save();
+      res.status(201).json(user.readBooks);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+  
+  // Add a game to user's collection
+  router.post('/:userId/games', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      user.playedGames.push(req.body);
+      await user.save();
+      res.status(201).json(user.playedGames);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+  
+  // Add a music entry to user's collection
+  router.post('/:userId/music', async (req, res) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      user.listenedMusic.push(req.body);
+      await user.save();
+      res.status(201).json(user.listenedMusic);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+  
+  module.exports = router;
 
 module.exports = router;

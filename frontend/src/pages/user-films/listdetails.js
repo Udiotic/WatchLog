@@ -19,7 +19,7 @@ const ListDetails = () => {
     useEffect(() => {
         const fetchList = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/movie-list/${username}/${listName}`);
+                const response = await axios.get(`http://localhost:5001/api/user/movie-list/${username}/${listName}`);
                 const uniqueMovies = response.data.movies.filter((movie, index, self) =>
                     index === self.findIndex((m) => m.id === movie.id)
                 );
@@ -38,12 +38,12 @@ const ListDetails = () => {
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
+                    const profileResponse = await axios.get('http://localhost:5001/api/user/profile', {
                         headers: { 'x-auth-token': token }
                     });
                     setIsLoggedIn(true);
                     setCurrentUser(profileResponse.data);
-                    const watchedResponse = await axios.get(`http://localhost:5000/api/user/watched-movies/${profileResponse.data.username}`, {
+                    const watchedResponse = await axios.get(`http://localhost:5001/api/user/watched-movies/${profileResponse.data.username}`, {
                         headers: { 'x-auth-token': token }
                     });
                     setCurrentUserWatchedMovies(watchedResponse.data);
@@ -89,7 +89,7 @@ const ListDetails = () => {
     const handleRenameList = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/user/rename-list`, { listId: list._id, newName: newListName }, {
+            await axios.post(`http://localhost:5001/api/user/rename-list`, { listId: list._id, newName: newListName }, {
                 headers: { 'x-auth-token': token }
             });
             setList({ ...list, name: newListName });
@@ -102,7 +102,7 @@ const ListDetails = () => {
     const handleDeleteList = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/user/delete-list/${list._id}`, {
+            await axios.delete(`http://localhost:5001/api/user/delete-list/${list._id}`, {
                 headers: { 'x-auth-token': token }
             });
             navigate(`/profile/${username}/films/lists`);
@@ -115,7 +115,7 @@ const ListDetails = () => {
         try {
             const token = localStorage.getItem('token');
             const updatedMovies = list.movies.filter(movie => movie.id !== movieId);
-            await axios.post(`http://localhost:5000/api/user/remove-movie-from-list`, { listId: list._id, movieId }, {
+            await axios.post(`http://localhost:5001/api/user/remove-movie-from-list`, { listId: list._id, movieId }, {
                 headers: { 'x-auth-token': token }
             });
             setList({ ...list, movies: updatedMovies });

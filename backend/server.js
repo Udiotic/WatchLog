@@ -1,8 +1,8 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+
 const uri = process.env.MONGO_URI || "your-mongodb-uri-here";
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -10,9 +10,12 @@ const path = require('path');
 
 console.log('MongoDB URI:', process.env.MONGO_URI);
 
-
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Frontend URL
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Enable cookies to be sent with requests
+}));
 app.use(express.json());
 
 // MongoDB Atlas connection

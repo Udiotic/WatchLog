@@ -37,8 +37,8 @@ const MusicDetails = () => {
             };
 
             const url = listType === 'listened'
-                ? 'http://localhost:5000/api/user/toggle-listened-music'
-                : 'http://localhost:5000/api/user/toggle-playlist-music';
+                ? 'http://localhost:5001/api/user/toggle-listened-music'
+                : 'http://localhost:5001/api/user/toggle-playlist-music';
 
             const response = await axios.post(url, log, config);
             console.log('Response:', response);

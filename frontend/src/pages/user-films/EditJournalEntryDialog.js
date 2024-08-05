@@ -17,7 +17,7 @@ function EditJournalEntryDialog({ open, onClose, entry }) {
 
         try {
             const response = await axios.put(
-                'http://localhost:5000/api/user/update-journal-entry',
+                'http://localhost:5001/api/user/update-journal-entry',
                 {
                     entryId: entry._id,
                     rating,

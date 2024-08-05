@@ -29,7 +29,7 @@ const MovieDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/movie-lists/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/movie-lists/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -46,7 +46,7 @@ const MovieDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/watched-movies/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/watched-movies/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -64,7 +64,7 @@ const MovieDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/watchlist-movies/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/watchlist-movies/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -81,7 +81,7 @@ const MovieDetails = () => {
         const fetchReviews = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`http://localhost:5000/api/user/reviews/movie/${id}`, {
+                const response = await axios.get(`http://localhost:5001/api/user/reviews/movie/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'x-auth-token': token

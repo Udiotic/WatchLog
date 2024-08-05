@@ -13,7 +13,7 @@ const VerifyEmail = () => {
 
         const verifyEmail = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/auth/verify-email?token=${token}`);
+                const response = await axios.get(`http://localhost:5001/api/auth/verify-email?token=${token}`);
                 setMessage(response.data.message);
                 setTimeout(() => {
                     navigate('/login'); // Redirect to login after successful verification

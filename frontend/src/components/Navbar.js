@@ -49,7 +49,7 @@ function Navbar() {
         const fetchUserProfile = async () => {
             if (user) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/api/user/profile/${user.username}`);
+                    const response = await axios.get(`http://localhost:5001/api/user/profile/${user.username}`);
                     setFullUser(response.data);
                 } catch (error) {
                     console.error('Error fetching user profile', error);

@@ -18,17 +18,17 @@ const MovieIconBar = ({ movie }) => {
                 return;
             }
             try {
-                const watchedResponse = await axios.get(`http://localhost:5000/api/user/watched-movies/${username}`, {
+                const watchedResponse = await axios.get(`http://localhost:5001/api/user/watched-movies/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
                 setWatched(watchedResponse.data.some(m => m.id === movie.id));
 
-                const likedResponse = await axios.get(`http://localhost:5000/api/user/liked-movies/${username}`, {
+                const likedResponse = await axios.get(`http://localhost:5001/api/user/liked-movies/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
                 setLiked(likedResponse.data.some(m => m.id === movie.id));
 
-                const watchlistResponse = await axios.get(`http://localhost:5000/api/user/watchlist-movies/${username}`, {
+                const watchlistResponse = await axios.get(`http://localhost:5001/api/user/watchlist-movies/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
                 setInWatchlist(watchlistResponse.data.some(m => m.id === movie.id));
@@ -48,7 +48,7 @@ const MovieIconBar = ({ movie }) => {
         }
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/user/toggle-watched-movies',
+                'http://localhost:5001/api/user/toggle-watched-movies',
                 { item: movie },
                 {
                     headers: {
@@ -71,7 +71,7 @@ const MovieIconBar = ({ movie }) => {
         }
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/user/toggle-watchlist-movies',
+                'http://localhost:5001/api/user/toggle-watchlist-movies',
                 { item: movie },
                 {
                     headers: {
@@ -94,7 +94,7 @@ const MovieIconBar = ({ movie }) => {
         }
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/user/toggle-liked-movies',
+                'http://localhost:5001/api/user/toggle-liked-movies',
                 { item: movie },
                 {
                     headers: {

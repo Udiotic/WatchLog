@@ -10,7 +10,7 @@ const ActivityShows = () => {
     useEffect(() => {
         const fetchRecentActivities = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/recent-activities-shows/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/recent-activities-shows/${username}`);
                 setRecentActivities(response.data);
             } catch (error) {
                 console.error('Error fetching recent activities:', error);

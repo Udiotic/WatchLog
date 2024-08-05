@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'f0f9d58822fe556416d0a868289cd971';
+const API_KEY = process.env.REACT_APP_LASTFM_API;
 const BASE_URL = 'http://ws.audioscrobbler.com/2.0/';
 
 export const searchMusic = async (query, limit = 10) => {
@@ -47,3 +47,45 @@ export const getAlbumDetails = async (albumId) => {
     }
 };
 
+export const getTrendingMusic = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}`, {
+            params: {
+                method: 'chart.gettoptracks',
+                api_key: API_KEY,
+                format: 'json'
+            }
+        });
+        return response.data.tracks.track.slice(0, 10).map(track => ({
+            id: track.mbid || `${track.name}|${track.artist.name}`, // Use mbid or fallback
+            name: track.name,
+            artist: track.artist.name,
+            image: track.image[3]['#text'] // Assuming image[3] is the largest image
+        }));
+    } catch (error) {
+        console.error('Error fetching trending music:', error);
+        return [];
+    }
+};
+
+export const getPopularMusic = async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}`, {
+            params: {
+                method: 'tag.gettopalbums', // Assuming 'popular' is based on a specific genre or tag
+                tag: 'pop',
+                api_key: API_KEY,
+                format: 'json'
+            }
+        });
+        return response.data.albums.album.slice(0, 10).map(album => ({
+            id: album.mbid || `${album.name}|${album.artist.name}`,
+            name: album.name,
+            artist: album.artist.name,
+            image: album.image[3]['#text']
+        }));
+    } catch (error) {
+        console.error('Error fetching popular music:', error);
+        return [];
+    }
+};

@@ -37,8 +37,8 @@ const BookDetails = () => {
             };
 
             const url = listType === 'read'
-                ? 'http://localhost:5000/api/user/toggle-read-books'
-                : 'http://localhost:5000/api/user/toggle-readinglist-books';
+                ? 'http://localhost:5001/api/user/toggle-read-books'
+                : 'http://localhost:5001/api/user/toggle-readinglist-books';
 
             const response = await axios.post(url, log, config);
             console.log('Response:', response);

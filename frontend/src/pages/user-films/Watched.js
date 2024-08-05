@@ -15,7 +15,7 @@ const Watched = () => {
     useEffect(() => {
         const fetchWatchedMovies = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/watched-movies/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/watched-movies/${username}`);
                 const moviesWithDetails = await Promise.all(response.data.map(async (movie) => {
                     const details = await getMovieDetails(movie.id);
                     return { ...movie, ...details };

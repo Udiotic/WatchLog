@@ -34,7 +34,7 @@ const UploadAvatarDialog = ({ isOpen, onClose, setUser }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/user/avatar', formData, config);
+            const response = await axios.post('http://localhost:5001/api/user/avatar', formData, config);
             setUser(response.data);
             onClose();
             window.location.reload();
@@ -58,7 +58,7 @@ const UploadAvatarDialog = ({ isOpen, onClose, setUser }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/user/remove-avatar', {}, config);
+            const response = await axios.post('http://localhost:5001/api/user/remove-avatar', {}, config);
             setUser(response.data);
             onClose();
             window.location.reload();

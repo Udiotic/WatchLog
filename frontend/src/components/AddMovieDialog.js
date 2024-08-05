@@ -17,7 +17,7 @@ function AddMovieDialog({ open, onClose, movie }) {
 
         try {
             const response = await axios.post(
-                'http://localhost:5000/api/user/add-watched-movie',
+                'http://localhost:5001/api/user/add-watched-movie',
                 {
                     movie: { id: movie.id, title: movie.title, poster_path: movie.poster_path },
                     rating,

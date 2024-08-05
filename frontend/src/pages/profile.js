@@ -28,7 +28,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/profile/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/profile/${username}`);
                 setUser(response.data);
 
                 const token = localStorage.getItem('token');
@@ -39,7 +39,7 @@ const Profile = () => {
                             'x-auth-token': token
                         }
                     };
-                    const currentUserResponse = await axios.get('http://localhost:5000/api/user/profile', config);
+                    const currentUserResponse = await axios.get('http://localhost:5001/api/user/profile', config);
                     setCurrentUser(currentUserResponse.data);
                 }
             } catch (error) {
@@ -70,7 +70,7 @@ const Profile = () => {
                     'x-auth-token': localStorage.getItem('token')
                 }
             };
-            const response = await axios.post(`http://localhost:5000/api/user/follow/${user._id}`, {}, config);
+            const response = await axios.post(`http://localhost:5001/api/user/follow/${user._id}`, {}, config);
             setUser(prevState => ({
                 ...prevState,
                 followers: response.data.followers

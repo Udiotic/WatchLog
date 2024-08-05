@@ -19,7 +19,7 @@ const ListDetailsShows = () => {
     useEffect(() => {
         const fetchList = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/show-list/${username}/${listName}`);
+                const response = await axios.get(`http://localhost:5001/api/user/show-list/${username}/${listName}`);
                 const uniqueShows = response.data.shows.filter((show, index, self) =>
                     index === self.findIndex((s) => s.id === show.id)
                 );
@@ -38,12 +38,12 @@ const ListDetailsShows = () => {
             try {
                 const token = localStorage.getItem('token');
                 if (token) {
-                    const profileResponse = await axios.get('http://localhost:5000/api/user/profile', {
+                    const profileResponse = await axios.get('http://localhost:5001/api/user/profile', {
                         headers: { 'x-auth-token': token }
                     });
                     setIsLoggedIn(true);
                     setCurrentUser(profileResponse.data);
-                    const watchedResponse = await axios.get(`http://localhost:5000/api/user/watched-shows/${profileResponse.data.username}`, {
+                    const watchedResponse = await axios.get(`http://localhost:5001/api/user/watched-shows/${profileResponse.data.username}`, {
                         headers: { 'x-auth-token': token }
                     });
                     setCurrentUserWatchedShows(watchedResponse.data);
@@ -89,7 +89,7 @@ const ListDetailsShows = () => {
     const handleRenameList = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:5000/api/user/rename-list-show`, { listId: list._id, newName: newListName }, {
+            await axios.post(`http://localhost:5001/api/user/rename-list-show`, { listId: list._id, newName: newListName }, {
                 headers: { 'x-auth-token': token }
             });
             setList({ ...list, name: newListName });
@@ -102,7 +102,7 @@ const ListDetailsShows = () => {
     const handleDeleteList = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/user/delete-list-show/${list._id}`, {
+            await axios.delete(`http://localhost:5001/api/user/delete-list-show/${list._id}`, {
                 headers: { 'x-auth-token': token }
             });
             navigate(`/profile/${username}/shows/lists`);
@@ -115,7 +115,7 @@ const ListDetailsShows = () => {
         try {
             const token = localStorage.getItem('token');
             const updatedShows = list.shows.filter(show => show.id !== showId);
-            await axios.post(`http://localhost:5000/api/user/remove-show-from-list`, { listId: list._id, showId }, {
+            await axios.post(`http://localhost:5001/api/user/remove-show-from-list`, { listId: list._id, showId }, {
                 headers: { 'x-auth-token': token }
             });
             setList({ ...list, shows: updatedShows });

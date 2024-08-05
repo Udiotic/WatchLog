@@ -27,7 +27,7 @@ const TVShowDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/tvshow-lists/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/tvshow-lists/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -44,7 +44,7 @@ const TVShowDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/watched-tvshows/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/watched-tvshows/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -62,7 +62,7 @@ const TVShowDetails = () => {
             if (username) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await axios.get(`http://localhost:5000/api/user/watchlist-tvshows/${username}`, {
+                    const response = await axios.get(`http://localhost:5001/api/user/watchlist-tvshows/${username}`, {
                         headers: {
                             'Content-Type': 'application/json',
                             'x-auth-token': token
@@ -79,7 +79,7 @@ const TVShowDetails = () => {
         const fetchReviews = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`http://localhost:5000/api/user/reviews/tvshow/${id}`, {
+                const response = await axios.get(`http://localhost:5001/api/user/reviews/tvshow/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'x-auth-token': token
@@ -117,8 +117,8 @@ const TVShowDetails = () => {
             };
 
             const url = listType === 'watched'
-                ? 'http://localhost:5000/api/user/toggle-watched-tvshows'
-                : 'http://localhost:5000/api/user/toggle-watchlist-tvshows';
+                ? 'http://localhost:5001/api/user/toggle-watched-tvshows'
+                : 'http://localhost:5001/api/user/toggle-watchlist-tvshows';
 
             const response = await axios.post(url, log, config);
             console.log('Response:', response);

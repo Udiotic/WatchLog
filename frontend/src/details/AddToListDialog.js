@@ -16,7 +16,7 @@ function AddToListDialog({ open, onClose, movie, lists }) {
         try {
             if (selectedList === 'new') {
                 const response = await axios.post(
-                    'http://localhost:5000/api/user/add-movie-list',
+                    'http://localhost:5001/api/user/add-movie-list',
                     { name: newListName },
                     {
                         headers: {
@@ -27,7 +27,7 @@ function AddToListDialog({ open, onClose, movie, lists }) {
                 );
                 const newList = response.data[response.data.length - 1];
                 await axios.post(
-                    'http://localhost:5000/api/user/add-movie-to-list',
+                    'http://localhost:5001/api/user/add-movie-to-list',
                     { listId: newList._id, movie },
                     {
                         headers: {
@@ -39,7 +39,7 @@ function AddToListDialog({ open, onClose, movie, lists }) {
                 onClose(response.data);
             } else {
                 await axios.post(
-                    'http://localhost:5000/api/user/add-movie-to-list',
+                    'http://localhost:5001/api/user/add-movie-to-list',
                     { listId: selectedList, movie },
                     {
                         headers: {

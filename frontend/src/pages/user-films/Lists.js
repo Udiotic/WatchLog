@@ -13,7 +13,7 @@ const Lists = () => {
     useEffect(() => {
         const fetchLists = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/movie-lists/${username}`);
+                const response = await axios.get(`http://localhost:5001/api/user/movie-lists/${username}`);
                 setLists(response.data);
             } catch (error) {
                 console.error('Error fetching lists:', error);

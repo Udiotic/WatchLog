@@ -24,23 +24,23 @@ const ShowsHome = () => {
             try {
                 const token = localStorage.getItem('token');
 
-                const completedResponse = await axios.get(`http://localhost:5000/api/user/completed-shows/${username}`, {
+                const completedResponse = await axios.get(`http://localhost:5001/api/user/completed-shows/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const watchingResponse = await axios.get(`http://localhost:5000/api/user/watching-shows/${username}`, {
+                const watchingResponse = await axios.get(`http://localhost:5001/api/user/watching-shows/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const watchlistResponse = await axios.get(`http://localhost:5000/api/user/watchlist-shows/${username}`, {
+                const watchlistResponse = await axios.get(`http://localhost:5001/api/user/watchlist-shows/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const listsResponse = await axios.get(`http://localhost:5000/api/user/show-lists/${username}`, {
+                const listsResponse = await axios.get(`http://localhost:5001/api/user/show-lists/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
-                const journalResponse = await axios.get(`http://localhost:5000/api/user/journal-entries/${username}`, {
+                const journalResponse = await axios.get(`http://localhost:5001/api/user/journal-entries/${username}`, {
                     headers: { 'x-auth-token': token }
                 });
 
@@ -61,7 +61,7 @@ const ShowsHome = () => {
         const checkCurrentUser = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5000/api/user/profile', {
+                const response = await axios.get('http://localhost:5001/api/user/profile', {
                     headers: { 'x-auth-token': token }
                 });
                 setIsCurrentUser(response.data.username === username);
@@ -77,7 +77,7 @@ const ShowsHome = () => {
     useEffect(() => {
         const fetchFavorites = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/api/user/favorite-shows/${username}/${timeframe}`);
+                const response = await axios.get(`http://localhost:5001/api/user/favorite-shows/${username}/${timeframe}`);
                 console.log('Fetched favorites:', response.data); // Debug log
                 
                 setFavorites(response.data);
@@ -93,7 +93,7 @@ const ShowsHome = () => {
         if (show) {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.post(`http://localhost:5000/api/user/favorite-shows/${timeframe}`, { show }, {
+                const response = await axios.post(`http://localhost:5001/api/user/favorite-shows/${timeframe}`, { show }, {
                     headers: { 'x-auth-token': token }
                 });
                 console.log('Added favorite:', response.data); // Debug log
@@ -110,7 +110,7 @@ const ShowsHome = () => {
     const handleRemoveFavorite = async (showId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`http://localhost:5000/api/user/remove-favorite-show/${timeframe}`, { showId }, {
+            const response = await axios.post(`http://localhost:5001/api/user/remove-favorite-show/${timeframe}`, { showId }, {
                 headers: { 'x-auth-token': token }
             });
             console.log('Removed favorite:', response.data); // Debug log
